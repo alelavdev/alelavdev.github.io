@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hub Aurea</title>
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+  <!-- Header Section -->
+  <header class="header">
+    <div class="menu-icon" onclick="toggleMenu()">&#9776;</div>
+    <h1 class="app-title">Hub Aurea</h1>
+  </header>
+
+  <!-- Sidebar Menu -->
+  <nav id="sidebar" class="sidebar">
+    <ul>
+      <li><a href="#" onclick="showSection('home')">Home</a></li>
+      <li><a href="#" onclick="showSection('news')">News</a></li>
+      <li><a href="#" onclick="showSection('ufficio')">Ufficio</a></li>
+      <li><a href="#" onclick="showSection('orari')">Orari</a></li>
+      <li><a href="#" onclick="showSection('fastnews')">FastNews</a></li>
+      <li><a href="#" onclick="showSection('numeri')">Numeri Utili</a></li>
+    </ul>
+  </nav>
+
+  <!-- Menu Overlay -->
+  <div id="menu-overlay" class="menu-overlay" onclick="closeMenu()"></div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    
+    <!-- Home Section -->
+    <section id="home" class="section">
+      <h2>Home</h2>
+      <!-- Carosello delle news -->
+      <div class="carousel-container">
+        <div class="carousel-slide">
+          <div class="carousel-item">
+            <a href="#" onclick="showSection('fastnews')"><img src="fastnews/title.jpg" alt="Fast News Diponibile!"></a>
+          </div>
+          <div class="carousel-item">
+            <a href="#" onclick="openNewsModal('news1')"><img src="immagini/BigTasty_Bacon.jpg" alt="We reduce our waste!"></a>
+          </div>
+          <div class="carousel-item">
+            <a href="#" onclick="openNewsModal('news3')"><img src="immagini/crew.jpg" alt="New workshops!"></a>
+          </div>
+        </div>
+        <button class="prev" onclick="moveSlide(-1)">&#10094;</button>
+        <button class="next" onclick="moveSlide(1)">&#10095;</button>
+      </div>
+      <!-- -->
+      <section class="news">
+        <div class="card">
+          <a href="#" onclick="showSection('news')"><img src="immagini/BigTasty.jpg" alt="Big tasty Disponibile!"></a>
+          <h2>Big tasty Disponibile!</h2>
+          <p>25/10/2024</p>
+          <p>Ricordiamo che da oggi è tornato il Big Tasty, seguito da Tasty Wrap e Big Tasty Bacon!</p>
+        </div>
+        <div class="card">
+          <a href="#" onclick="showSection('orari')"><img src="orari/orari.jpg" alt="Orari della settimana"></a>
+          <h2>Orari settimanali.</h2>
+          <p>25/10/2024</p>
+          <p>Sono Disponibili i nuovi orari della settimana.</p>
+        </div>
+        <div class="card">
+          <a href="#" onclick="showSection('news')"><img src="immagini/crew.jpg" alt="Happy Meal"></a>
+          <h2>I nuovi Happy Meal!</h2>
+          <p>25/10/2024</p>
+        </div>
+      </section>
+    </section>
+    <!-- Fast News -->
+    <script src="https://cdn.jsdelivr.net/npm/@panzoom/panzoom@9.4.0/dist/panzoom.min.js"></script>
+    <script>
+      const elem = document.getElementById('zoom-container');
+      const panzoom = Panzoom(elem, {
+        maxScale: 3, // Massimo livello di zoom
+        contain: 'inside' // Assicura che l'immagine non esca dal contenitore
+      });
+      elem.addEventListener('wheel', panzoom.zoomWithWheel);
+    </script>
+    
+    <section id="fastnews" class="section" style="display: none;">
+      <h2>FastNews</h2>
+      <div id="zoom-container">
+          <img id="zoom-image" src="fastnews/fastnews_page-0001.jpg" alt="FastNews Page 1" style="width:100%;" />
+          <img id="zoom-image" src="fastnews/fastnews_page-0002.jpg" alt="FastNews Page 2" style="width:100%;" />
+          <img id="zoom-image" src="fastnews/fastnews_page-0003.jpg" alt="FastNews Page 3" style="width:100%;" />
+          <img id="zoom-image" src="fastnews/fastnews_page-0004.jpg" alt="FastNews Page 4" style="width:100%;" />
+      </div>
+    </section>
+    <!-- Orari -->
+    <section id="orari" class="section" style="display: none;">
+      <h2>Orari Manager</h2>
+      <div id="zoom-container">
+          <img id="zoom-image" src="orari/manager_21_27.jpg" alt="Orari Page 1" style="width:100%;" />
+          <img id="zoom-image" src="orari/manager_28_03.jpg" alt="Orari Page 1" style="width:100%;" />
+      </div>
+      <h2>Orari Crew</h2>
+      <div id="zoom-container">
+          <img id="zoom-image" src="orari/crew_21_27_1.jpg" alt="Orari Page 1" style="width:100%;" />
+          <img id="zoom-image" src="orari/crew_21_27_2.jpg" alt="Orari Page 2" style="width:100%;" />
+      </div>
+    </section>
+    <!-- Ufficio Section -->
+    <section id="ufficio" class="section" style="display: none;">
+        <h2>Tutorial - Ufficio</h2>
+        
+        <div class="tutorial-category">
+          <h3>P&L</h3><div class="slideshow-container">
+
+            <div class="slide">
+              <h2>(1) Fase Preparatoria: Report Vendite</h2>
+              <p>Fai una foto del report delle vendite giornaliere (sales history) dell'ultima settimana e invia la foto al gruppo amministrazione per la revisione.</p>
+            </div>
+            <div class="slide">
+              <h2>(2)Controllo dell'Inventario</h2>
+              <p>Conta l'inventario e verifica che tutto sia in ordine. Accedi al sistema di inserimento dell'inventario e controlla che non ci siano item non contati.</p>
+            </div>
+            <div class="slide">
+              <h2>(3)Report Inventario</h2>
+              <p>Vai su report inventario/report variazione inventario.</p>
+              <p>Clicca su range e prendi come periodo l'ultima settimana, filtra per valore e carica.</p>
+            </div>
+            <div class="slide">
+              <h2>(4)Valore magazzino</h2>
+              <p>Clicca su diff.value, controlla cosa hai in positivo e in negativo in quantità troppo elevate.</p>
+              <p>Vai su Summary e calcola la deviazione (variazione + scarti).</p>
+            </div>
+            <div class="slide">
+              <h2>(5)Calcolo deviazione</h2>
+              <p>In base al range del tuo ristorante puoi valutare lo stato della tua deviazione.</p>
+              <p>Esempio: Il tuo locale ha un range di 1200 euro mensile come deviazione, la tua deviazione massima sarà 1200/4 = 300 settimanale.</p>
+            </div>
+            <div class="slide">
+              <h2>(6)Chiusura e stampa</h2>
+              <p>Stampa il modulo REPORT OPERATIVO (stat) sia nel range settimanale che mensile.</p>
+              <p>Chiudi la giornata su mystore.</p>
+            </div>
+            <div class="slide">
+              <h2>(7)P&L</h2>
+              <p>Vai su P&L da mystore, seleziona mese in corso e aggiorna.</p>
+              <p>Stampa il modulo. Da qui prenderai il PAC (Profit After Controllables) da inserire nel modulo.</p>
+              <p>Le pagine principali che ci servono sono la 3 e la 4, qui trovi le variazioni e deviazioni food e paper.</p>
+            </div>
+            <div class="slide">
+              <h2>(8)Smart Business</h2>
+              <p>Apri Smart Business, entra con l'account del tuo ristorante.</p>
+              <p>Vai su reports/cruscotto/cruscotto generale.</p>
+              <p>Inserisci la data del giorno della chiusura inventario ed esegui.</p>
+            </div>
+            <div class="slide">
+              <h2>(9)Dati modulo</h2>
+              <p>Il modulo richiede la vendita totale settimanale corrente e dell'anno passato nella stessa settimana(Week).</p>
+              <p>Inserisci i dati relativi alle rispettive sezioni: drive, kiosk, nack kiosk e delivery.</p>
+              <p>Prendi solo le Gcs per il McCaffè, per i dati sulle vendite dei andare su reports/pmx/gruppi.</p>
+              <p>Prendi il range della settimana corrente e prendi i dati sulle vendite, ripeti per l'anno passato cambiando la data in base al week.</p>
+              <p>Per l'inserimento Overring e sconti promozioni, vai su smart business in analisi scontrino/storni/settimana/storno.</p>              
+              <p>Per l'inserimento dei tempi vai su smart business report speed of service.</p>
+              <p>Vai sul sito dei CF per trovare i valori di soddisfazione, pulizia ecc..</p>
+            </div>
+            <div class="slide">
+              <h2>(10)Finalizzazione email</h2>
+              <p>Completato il modulo, se hai anche il costo del lavoro compilato, esegui la compilazione dell'email.</p>
+              <p>Specifica il costo del lavoro settimanale.</p>
+              <p>Inserisci i dati come nell'immagine sotto.</p>
+              <p>Variazione e DEVIAZIONE FOOD e PAPER li trovi su REPORT OPERATIVO (stat) nel range settimanale che hai stampato in precedenza.</p>
+              <p>Materiale operativo lo trovi su P&L.</p>
+              <img id="zoom-image" src="immagini/email.png" alt="email" style="width:100%;" />
+            </div>
+          
+            <a class="prev" onclick="moveSlider(-1)">&#10094;</a>
+            <a class="next" onclick="moveSlider(1)">&#10095;</a>
+          </div>
+          
+        </div>
+    </section>
+
+    <!-- News Section --><section id="news" class="section" style="display: none;">
+    <h2>News</h2>
+      <div class="news-section">
+        <div class="news-card" onclick="openNewsModal('news1')">
+          <a href="#"><img src="immagini/BigTasty.jpg" alt="News 1"></a>
+          <h2>Big Tasty Days</h2>
+          <p>25/10/2024</p>
+        </div>
+        <div class="news-card" onclick="openNewsModal('news2')">
+          <a href="#"><img src="immagini/crew.jpg" alt="News 2"></a>
+          <h2>Guida ai nuovi Happy Meal</h2>
+          <p>25/10/2024</p>
+        </div>
+        <div class="news-card" onclick="openNewsModal('news3')">
+          <a href="#"><img src="immagini/mccaffe.jpg" alt="News 3"></a>
+          <h2>Guida al McCaffè</h2>
+          <p>25/10/2024</p>
+        </div>
+        <div class="news-card" onclick="openNewsModal('news4')">
+          <a href="#"><img src="211024_Offerte-App_CRM-Novembre-2024/image (2).jpg" alt="News 4"></a>
+          <h2>Offerte CRM Novembre 2024</h2>
+          <p>25/10/2024</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Modale per la notizia completa -->
+    <div id="newsModal" class="modal" style="display: none;">
+      <div class="modal-content">
+        <span class="close-button" onclick="closeNewsModal()">&times;</span>
+        <!-- Carosello delle immagini -->
+        <div id="carouselContainer" style="display: none;">
+          <div id="carouselImages"></div>
+          <button onclick="prevImage()">&#10094;</button>
+          <button onclick="nextImage()">&#10095;</button>
+        </div>
+        <!-- Immagine singola -->
+        <img id="modalImage" src="" alt="News Image" style="display: none; width: 100%; border-radius: 8px;">
+        <!-- Resto del contenuto -->
+        <h2 id="modalTitle"></h2>
+        <p id="modalDate"></p>
+        <p id="modalContent"></p>
+      </div>
+    </div>    
+    <div id="imageModal" class="modal" style="display: none;">
+      <div class="modal-content">
+        <span class="close-button" onclick="closeImageModal()">&times;</span>
+        <img id="modalImageLarge" src="" alt="Large Image" style="width: 100%; border-radius: 8px;">
+      </div>
+    </div>
+    <!-- Numeri Section -->
+    <section id="numeri" class="section" style="display: none;">
+      <div class="numeri-utili">
+        <h3> CAFI </h3>
+        <p><a href="tel:+393405811505">Alessandro</a></p>
+        <p>Da contattare per: </p>
+        <p>Frigoriferi</p>
+        <p>Celle</p>
+        <p>Macchina del ghiaccio</p>
+        <p>Condizionatori UTA</p>
+        <p>Boiler</p>
+      </div>
+      <div class="numeri-utili">
+        <h3>Energy</h3>
+        <p><a href="tel:+393669221000">Florin </a></p> 
+        <p><a href="tel:+393319824408">Michele </a></p>
+        <p><a href="tel:+393501892030">Nicola</a></p>
+        <p>Da contattare per:</p>
+        <p>Toaster</p>
+        <p>Griglie</p>
+        <p>Friggitrici</p>
+        <p>Macchina del gelato</p>
+        <p>Tavoli</p>
+        <p>Rullo</p>
+        <p>Steamer</p>
+      </div>
+
+      <div class="numeri-utili">
+        <h3>Ciadit</h3>
+        <p><a href="mailto:intervento@ciadit.it">intervento@ciadit.it</a></p>
+        <p>Da contattare per:</p>
+        <p>Disinfestazioni</p>
+      </div>
+
+      <div class="numeri-utili">
+        <h3>Havi</h3>
+        <p><a href="tel:+390597880282">Assistenza</a></p>
+        <p>Da contattare per:</p>
+        <p>Delivery</p>
+      </div>
+
+      <div class="numeri-utili">
+        <h3>Coca-Cola</h3>
+        <p><a href="tel:+393357249610">Sergio</a></p>
+        <p>Da contattare per:</p>
+        <p>Problemi con la linea bibite</p>
+      </div>
+
+      <div class="numeri-utili">
+        <h3>Insea2000</h3>
+        <p><a href="tel:+39800110960">Assistenza</a></p>
+        <p>Da contattare per:</p>
+      </div>
+
+      <div class="numeri-utili">
+        <h3>Cillit</h3>
+        <p><a href="tel:+39067848295">Asistenza</a></p>
+        <p>Da contattare per:</p>
+        <p>Addolcitore</p>
+      </div>
+
+      <div class="numeri-utili">
+        <h3>Cimbali Mondo bar</h3>
+        <p><a href="tel:+390645435156">Assistenza</a></p>
+        <p>Da contattare per:</p>
+        <p>Assistenza Mccaffè</p>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="index.js"></script>
+</body>
+</html>

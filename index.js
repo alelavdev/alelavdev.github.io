@@ -1,4 +1,5 @@
 let menuOpen = false; 
+let userPrivilege = null;
 
 function toggleMenu() {
   const sidebar = document.getElementById('sidebar');
@@ -48,20 +49,6 @@ window.addEventListener('resize', () => {
     img.style.height = window.innerWidth > 768 ? 'auto' : '300px';
   });
 });
-
-function showSection(sectionId) {
-  const sections = document.querySelectorAll('.section');
-
-  sections.forEach(section => {
-    if (section.id === sectionId) {
-      section.style.display = 'block'; 
-    } else {
-      section.style.display = 'none'; 
-    }
-  });
-
-  closeMenu();
-}
 
 let currentSlideIndex = 0; 
 
@@ -211,4 +198,107 @@ function outsideImageModalClick(event) {
     closeImageModal();
   }
 }
+
+function showSection(sectionId) {
+  const sections = document.querySelectorAll('.section');
+
+  sections.forEach(section => {
+    if (section.id === sectionId) {
+      section.style.display = 'block'; 
+    } else {
+      section.style.display = 'none'; 
+    }
+  });
+  if (userPrivilege === "admin") {
+    document.querySelectorAll(".admin-section, .hospitality-section, .basic-section").forEach(section => {
+      section.style.display = "block";
+    });
+  } else if (userPrivilege === "hospitality") {
+    document.querySelectorAll(".hospitality-section, .basic-section").forEach(section => {
+      section.style.display = "block";
+    });
+    document.querySelectorAll(".admin-section").forEach(section => {
+      section.style.display = "none";
+    });
+  } else if (userPrivilege === "basic") {
+    document.querySelectorAll(".basic-section").forEach(section => {
+      section.style.display = "block";
+    });
+    document.querySelectorAll(".hospitality-section, .admin-section").forEach(section => {
+      section.style.display = "none";
+    });
+  }
+  closeMenu();
+}
+
+function showSection2(sectionId) {
+  
+  document.querySelectorAll(".ufficio-section").forEach(section => {
+    section.style.display = "none";
+  });
+
+  document.getElementById(`${sectionId}-section`).style.display = "block";
+}
+
+function showTutorial(tutorialId) {
+  
+  document.querySelectorAll('.tutorial-content').forEach(tutorial => {
+    tutorial.style.display = 'none';
+  });
+
+  document.getElementById(tutorialId).style.display = 'block';
+}
+
+
+function login() {
+  const usernameInput = document.getElementById("username").value;
+  const passwordInput = document.getElementById("password").value;
+
+  fetch("users.json")
+    .then(response => {
+      if (!response.ok) {
+        throw new Error("Errore nel caricamento del file JSON");
+      }
+      return response.json();
+    })
+    .then(data => {
+      const user = data.users.find(
+        u => u.username === usernameInput && u.password === passwordInput
+      );
+
+      if (user) {
+        userPrivilege = user.privilege;
+        document.getElementById("login-screen").style.display = "none";
+        document.getElementById("app-content").style.display = "block";
+
+        // Mostra o nasconde le sezioni in base al privilegio dell'utente
+        if (userPrivilege === "admin") {
+          document.querySelectorAll(".admin-section, .hospitality-section, .basic-section").forEach(section => {
+            section.style.display = "block";
+          });
+        } else if (userPrivilege === "hospitality") {
+          document.querySelectorAll(".hospitality-section, .basic-section").forEach(section => {
+            section.style.display = "block";
+          });
+          document.querySelectorAll(".admin-section").forEach(section => {
+            section.style.display = "none";
+          });
+        } else if (userPrivilege === "basic") {
+          document.querySelectorAll(".basic-section").forEach(section => {
+            section.style.display = "block";
+          });
+          document.querySelectorAll(".hospitality-section, .admin-section").forEach(section => {
+            section.style.display = "none";
+          });
+        }
+      } else {
+        const message = document.getElementById("login-message");
+        message.style.display = "block";
+        message.innerText = "Credenziali non valide";
+      }
+    })
+    .catch(error => console.error("Errore nel caricamento del JSON:", error));
+}
+
+
 

@@ -357,13 +357,13 @@ body {
   }
   
   .zoomable {
-    transition: transform 0.2s; /* Animazione dello zoom */
-    cursor: zoom-in; /* Cambia il cursore per indicare che è zoomabile */
+    transition: transform 0.2s; 
+    cursor: zoom-in; 
   }
   
   .zoomable:hover {
-    transform: scale(1.5); /* Ingrandisce l'immagine al 150% */
-    cursor: zoom-out; /* Cambia il cursore in uno zoom out quando ingrandita */
+    transform: scale(1.5); 
+    cursor: zoom-out; 
   }
   
   #carouselContainer {
@@ -375,7 +375,7 @@ body {
   
   #carouselImages img {
     max-width: 100%;
-    max-height: 400px; /* Limita l’altezza per mantenere il layout */
+    max-height: 400px; 
     border-radius: 8px;
   }
   
@@ -442,5 +442,136 @@ body {
       font-size: 1em; 
     }
   }
+  
+
+#login-screen {
+  text-align: center;
+  margin-top: 50px;
+  font-size: 1.2rem; 
+}
+
+#login-screen h2 {
+  font-size: 1.8rem; 
+  margin-bottom: 20px;
+}
+
+#login-screen input, #login-screen button {
+  font-size: 1rem; 
+  padding: 10px 12px;
+  margin: 12px 0;
+  width: 80%;
+  max-width: 350px;
+}
+
+#login-screen #login-message {
+  font-size: 0.9rem;
+  color: red;
+  margin-top: 10px;
+}
+
+@media (min-width: 1024px) {
+  #login-screen {
+    font-size: 2.4rem; 
+  }
+
+  #login-screen h2 {
+    font-size: 3.6rem; 
+  }
+
+  #login-screen input, #login-screen button {
+    font-size: 2rem; 
+    padding: 15px 20px; 
+    max-width: 500px;
+  }
+
+  #login-screen #login-message {
+    font-size: 1.5rem; 
+  }
+}
+
+.section-menu {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.section-menu button {
+  padding: 10px 15px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+#ufficio-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+  margin-top: 20px;
+}
+
+
+#ufficio-menu .card {
+  width: 80%; 
+  max-width: 300px;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #f9f9f9; 
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+#ufficio-menu .card button {
+  font-size: 1rem;
+  color: #333;
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  padding: 10px;
+}
+
+#ufficio-menu .card:hover {
+  transform: scale(1.05); 
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.tutorial-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.tutorial-menu .card {
+  width: 80%;
+  max-width: 300px;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #f9f9f9;
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.tutorial-menu .card button {
+  font-size: 1rem;
+  color: #333;
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  padding: 10px;
+}
+
+.tutorial-menu .card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+
+
+  
   
 

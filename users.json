@@ -1,0 +1,19 @@
+{
+  "users": [
+    {
+      "username": "crew",
+      "password": "crew2",
+      "privilege": "basic" 
+    },
+    {
+      "username": "hospitality",
+      "password": "hospitality2",
+      "privilege": "hospitality" 
+    },
+    {
+      "username": "admin",
+      "password": "admin2",
+      "privilege": "admin" 
+    }
+  ]
+}

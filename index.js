@@ -117,15 +117,15 @@ function openNewsModal(newsId) {
       date: "25/10/2024",
       carousel: true, 
       folder: "Guida_mcCaffè", 
-      imageCount: 15,
+      imageCount: 21,
       content: "Guida per le bevande invernali del McCaffè."
     },
-    news3: {
+    news4: {
       title: "Offerte CRM Novembre 2024 ",
       date: "25/10/2024",
       carousel: true, 
       folder: "211024_Offerte-App_CRM-Novembre-2024", 
-      imageCount: 15,
+      imageCount: 4,
       content: "Lista delle ooferte CRM di novembre."
     },
   };

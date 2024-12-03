@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hub Aurea</title>
+  <link rel="stylesheet" href="index.css">
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
+</head>
+<body>
+  <div id="login-screen">
+    <h2>Accesso</h2>
+    <input type="text" id="username" placeholder="Nome utente">
+    <input type="password" id="password" placeholder="Password">
+    <button onclick="login()">Accedi</button>
+    <p id="login-message" style="color: red; display: none;">Credenziali non valide</p>
+    <div class="app-title">
+      <img src="https://nxdgrrympafaeomfgcnh.supabase.co/storage/v1/object/public/hub-immagini/Hub_Aurea_Logo_Transparent.png?t=2024-11-02T13%3A21%3A58.753Z" alt="Hub Aurea Logo" class="logo">
+    </div>
+  </div>
+  <div id="app-content" style="display: none;">
+  <div class="main-container">
+  <!-- Header Section -->
+  <header class="header">
+    <div class="menu-icon" onclick="toggleMenu()">&#9776;</div>
+    <div class="app-title" onclick="showMainSections(); showSection('home')">
+      <img src="https://nxdgrrympafaeomfgcnh.supabase.co/storage/v1/object/public/hub-immagini/Hub_Aurea_Logo_Transparent.png?t=2024-11-02T13%3A21%3A58.753Z" alt="Hub Aurea Logo" class="logo">
+    </div>
+    <div class="section master-section" style="display: none;">
+      <div class="locale-selector">
+        <select id="localeSelect" onchange="cambiaLocale(this.value)">
+        </select>
+      </div>
+    </div>
+    
+  </header>
+  <div id="immagineModal" class="modalimmagine" style="display: none;">
+    <span class="close" onclick="closeImageModal()">&times;</span>
+    <img class="modalimmagine-content" id="modalimmagine">
+    <div id="caption"></div>
+  </div>
+  <div id="customConfirm" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:rgb(20, 19, 19); padding:20px; border:1px solid #ccc; border-radius:5px;">
+    <p id="customConfirmMessage"></p>
+    <button onclick="handleConfirm(true)">OK</button>
+    <button onclick="handleConfirm(false)">Annulla</button>
+  </div>  
+  <div id="notification" class="notification" style="display: none;"></div>
+  <!-- Sidebar Menu -->
+  <nav id="sidebar" class="sidebar">
+    <ul>
+      <li><a href="#" onclick="showMainSections(); showSection('home')">Home</a></li>
+      <li><a href="#" onclick="showMainSections(); showSection('news')">News</a></li>
+      <div class="section admin-section" style="display: none;">
+        <li><a href="#" onclick="toggleSubMenu('ufficio-submenu')">Ufficio</a>
+          <ul id="ufficio-submenu" class="submenu">
+            <li><a href="#" onclick="showSection2('trasferimenti')">Trasferimenti</a></li>
+            <li><a href="#" onclick="showSection2('ordini')">Prodotti esauriti</a></li>
+            <li><a href="#" onclick="showSection2('malattie')">Malattie</a></li>
+            <li><a href="#" onclick="showSection2('formazione')">Formazioni</a></li>
+            <li><a href="#" onclick="showSection2('annunci-importanti')">Postit</a></li>
+            <li><a href="#" onclick="showSection2('tutorial')">Tutorial</a></li>
+            <li><a href="#" onclick="showSection2('contacts-section')">Contatti Aurea</a></li>
+            <li><a href="#" onclick="showSection2('numeri')">Numeri Utili</a></li>
+            <li><a href="https://alelav90.github.io/">Sezione moduli</a></li>
+          </ul>
+        </li>
+      </div>
+      <li><a href="#" onclick="toggleSubMenu('orari-submenu')">Orari</a>
+        <ul id="orari-submenu" class="submenu">
+          <li><a href="#" onclick="showSection2('orari-crew')">Crew</a></li>
+          <div class="section admin-section" style="display: none;">
+            <li><a href="#" onclick="showSection2('orari-manager')">Manager</a></li>
+          </div>
+          <li><a href="#" onclick="showSection2('richieste')">Richieste Permessi</a></li>
+        </ul>
+      </li>
+      <div class="section hospitality-section" style="display: none;">
+        <li><a href="#" onclick="showMainSections(); showSection('fastnews')">FastNews</a></li>
+        <li><a href="#" onclick="toggleSubMenu('feste-submenu')">Feste</a>
+          <ul id="feste-submenu" class="submenu">
+            <li><a href="#" onclick="showSection2('item')">Item</a></li>
+            <li><a href="#" onclick="showSection2('calendario')">Calendario</a></li>
+          </ul>
+        </li>
+      </div>
+      <li><a href="#" onclick="toggleSubMenu('account-submenu')">Account</a>
+        <ul id="account-submenu" class="submenu">
+          <li><a href="#" onclick="logout()">Logout</a></li>
+        </ul>
+      </li>
+      <div class="section master-section" style="display: none;">
+        <li><a href="#" onclick="showSection2('createAccountSection')">Crea un nuovo account</a></li>
+      </div>
+    </ul>
+  </nav>
+  <!-- Creazione account-->
+  <section id="createAccountSection" class="section2" style="display: none;">
+    <h2>Crea Nuovo Account</h2>
+    <form id="createAccountForm">
+
+      <label for="username">Nome utente:</label>
+      <input type="text" id="usernameAdd" name="usernameAdd" placeholder="Inserisci nome utente" required>
+
+      <label for="password">Password:</label>
+      <input type="password" id="passwordAdd" name="passwordAdd" placeholder="Inserisci password" required>
+
+  
+      <label for="roleRequired">Ruolo richiesto:</label>
+        <select id="roleRequired" name="roleRequired">
+        <option value="basic">Basic</option>
+        <option value="hospitality">Hospitality</option>
+        <option value="admin">Admin</option>
+        <option value="master">Master</option>
+      </select>
+      
+      <label for="localeSelect2">Locale:</label>
+      <select id="localeSelect2"></select>
+  
+      <button type="button" onclick="creaAccount()">Crea Account</button>
+    </form>
+    <div id="accountCreationMessage" style="color: green; display: none;">Account creato con successo!</div>
+  </section>
+  <!-- Menu Overlay -->
+  <div id="menu-overlay" class="menu-overlay" onclick="closeMenu()"></div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    
+    <!-- Home Section -->
+    <section id="home" class="section">
+      <h2>Home</h2>
+      <!-- Carosello delle news -->
+      <div class="carousel-container">
+        <div class="carousel-slide">
+          
+            <div class="carousel-item">
+              <a href="#" onclick="showSection('fastnews')"><img src="https://nxdgrrympafaeomfgcnh.supabase.co/storage/v1/object/public/hub-immagini/title.jpg?t=2024-11-02T13%3A22%3A40.425Z" alt="Fast News Diponibile"></a>
+            </div>
+          <div class="carousel-item">
+            <a href="#" onclick="showSection('news')"><img src="https://nxdgrrympafaeomfgcnh.supabase.co/storage/v1/object/public/hub-immagini/BigTasty_Bacon.jpg?t=2024-11-02T13%3A22%3A49.446Z" alt="Big Tasty"></a>
+          </div>
+          <div class="carousel-item">
+            <a href="#" onclick="showSection('news')"><img src="https://nxdgrrympafaeomfgcnh.supabase.co/storage/v1/object/public/hub-immagini/crew.jpg?t=2024-11-02T13%3A22%3A56.460Z" alt="Area crew"></a>
+          </div>
+        </div>
+        <button class="prev" onclick="moveSlide(-1)">&#10094;</button>
+        <button class="next" onclick="moveSlide(1)">&#10095;</button>
+      </div>
+      <!-- -->
+      <section class="news">
+        <div class="card">
+          <a href="#" onclick="showSection('news')"><img src="https://nxdgrrympafaeomfgcnh.supabase.co/storage/v1/object/public/hub-immagini/BigTasty.jpg?t=2024-11-02T13%3A23%3A05.527Z" alt="Big tasty Disponibile!"></a>
+          <h2>Big tasty Disponibile!</h2>
+          <p>25/10/2024</p>
+          <p>Ricordiamo che da oggi è tornato il Big Tasty, seguito da Tasty Wrap e Big Tasty Bacon!</p>
+        </div>
+        <div class="card">
+          <a href="#" onclick="showSection2('orari-crew')"><img src="https://nxdgrrympafaeomfgcnh.supabase.co/storage/v1/object/public/hub-immagini/orari.jpg?t=2024-11-02T13%3A23%3A13.398Z" alt="Orari della settimana"></a>
+          <h2>Orari settimanali.</h2>
+          <p>Sono Disponibili i nuovi orari della settimana.</p>
+        </div>
+        <div class="card">
+          <a href="#" onclick="showSection('news')"><img src="https://nxdgrrympafaeomfgcnh.supabase.co/storage/v1/object/public/hub-immagini/crew.jpg?t=2024-11-02T13%3A22%3A56.460Z" alt="Happy Meal"></a>
+          <h2>I nuovi Happy Meal!</h2>
+          <p>25/10/2024</p>
+        </div>
+      </section>
+      <div id="annunciPostitContainer" class="postit-container"></div>
+    </section>
+    <!-- annunci importanti -->
+    <section id="annunci-importanti" class="section2" style="display: none;">
+      <h2>Postit</h2>
+      <form id="annuncioForm">
+        <label for="titolo">Titolo:</label>
+        <input type="text" id="titolo" name="titolo" required>
+        
+        <label for="contenuto">Contenuto:</label>
+        <textarea id="contenuto" name="contenuto" required></textarea>
+        
+        <button type="button" onclick="creaAnnuncio()">Carica Annuncio</button>
+      </form>
+      <div id="visualizzazionePostit" class="order-window">
+        <h3>Elenco </h3>
+        <ul id="postitList"></ul>
+        <button onclick="caricaPostit()">Aggiorna Lista</button>
+      </div>
+    </section>
+    <!-- Fast News -->
+      <section id="fastnews" class="section" style="display: none;">
+        <h2>FastNews</h2>
+
+        <div class="section master-section" style="display: none;">
+          <input type="file" id="pdfFileInput" accept="application/pdf">
+          <button onclick="caricaEPDFinJPG()">Carica PDF</button>
+          <button onclick="eliminaTuttaTabella()">Pulisci pagina</button>
+        </div>
+
+        <div id="zoom-container"></div>
+      </section>
+    <!-- Ordini -->
+      <section id="ordini" class="section2" style="display: none;">
+        <h2>Prodotti esauriti</h2>
+      
+        <div id="inserimentoOrdine" class="order-window">
+          <h3>Inserisci item mancante o in esaurimento</h3>
+          <textarea id="newOrderText" placeholder="Scrivi nome item..."></textarea>
+          <button onclick="aggiungiOrdine()">Inserisci</button>
+        </div>
+      
+        <div id="visualizzazioneOrdini" class="order-window">
+          <h3>Elenco </h3>
+          <ul id="ordiniList"></ul>
+          <button onclick="caricaOrdini()">Aggiorna Lista</button>
+        </div>
+      </section>
+    <!-- Trasferimenti -->
+    <section id="trasferimenti" class="section2" style="display: none;">
+      <h2>Gestione Trasferimenti</h2>
+      <form id="trasferimentoForm">
+        <label for="localeSelect2">Locale:</label>
+        <select id="localeSelect2"></select>
+      
+        <label for="tipoTrasferimento">Tipo di Trasferimento:</label>
+        <select id="tipoTrasferimento">
+          <option value="in">In</option>
+          <option value="out">Out</option>
+        </select>
+      
+        <div id="itemsContainer">
+          <div class="item">
+            <label for="prodotto">Prodotto:</label>
+            <input type="text" name="prodotto" required>
+    
+            <label for="quantita">Quantità:</label>
+            <input type="number" name="quantita" required>
+    
+            <label for="unitaMisura">Unità di Misura:</label>
+            <select name="unitaMisura">
+              <option value="pezzi">Pezzi</option>
+              <option value="buste">Buste</option>
+              <option value="kg">Kg</option>
+              <option value="cartoni">Cartoni</option>
+            </select>
+          </div>
+        </div>
+        
+        <button type="button" onclick="aggiungiItem()">+ Aggiungi Item</button>
+        <button type="button" id="salvaTrasferimentoButton" onclick="salvaTrasferimento()">Salva Trasferimento</button>
+        <button type="button" id="aggiornaTrasferimentoButton" onclick="aggiornaTrasferimento()" style="display: none;">Aggiorna Trasferimento</button>
+      </form>
+      
+      <div id="trasferimentiList">
+        <h3>Lista Trasferimenti</h3>
+        <div id="listaTrasferimentiContainer"></div>
+      </div>
+    </section>
+    
+    <!-- Orari -->
+    <div class="section admin-section" style="display: none;">
+      <section id="orari-manager" class="section2" style="display: none;">
+        <h3>Carica Orari Manager</h3>
+        <input type="text" id="orarioManagerTitle" placeholder="Titolo dell'orario Manager">
+      
+        <div class="file-upload">
+          <input type="file" id="orarioManagerFile" accept="image/*,application/pdf" onchange="handleFileChangeOrario(event)">
+          <label for="orarioManagerFile" class="file-upload-label">Scegli un file</label>
+          <span id="fileName">Nessun file selezionato</span>
+        </div>          
+
+        <button onclick="salvaImmagineOrario('manager')">Salva Orario Manager</button>
+        <div id="orariManagerContainer">
+          <h3>Orari Manager</h3>
+        </div>
+      </section>
+    </div>
+
+    <section id="orari-crew" class="section2" style="display: none;">
+      <h3>Carica Orari Crew</h3>
+      <input type="text" id="orarioCrewTitle" placeholder="Titolo dell'orario Crew">
+    
+      <div class="file-upload">
+        <input type="file" id="orarioCrewFile" accept="image/*,application/pdf" onchange="handleFileChangeOrario(event)">
+        <label for="orarioCrewFile" class="file-upload-label">Scegli un file</label>
+        <span id="fileName">Nessun file selezionato</span>
+      </div>
+
+      <button onclick="salvaImmagineOrario('crew')">Salva Orario Crew</button>
+      <div id="orariCrewContainer">
+        <h3>Orari Crew</h3>
+      </div>
+    </section>
+
+    <!-- Richieste -->
+    <section id="richieste" class="section2" style="display: none;">
+      <h2>Richieste di Permesso</h2>
+      <form id="permessoForm">
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" name="nome" required>
+        
+        <label for="dataInizio">Data Inizio Permesso:</label>
+        <input type="date" id="dataInizio" name="dataInizio" required>
+        
+        <label for="dataFine">Data Fine Permesso:</label>
+        <input type="date" id="dataFine" name="dataFine" required>
+        
+        <label for="motivo">Motivo (opzionale):</label>
+        <textarea id="motivo" name="motivo"></textarea>
+        
+        <button type="button" onclick="inviaRichiesta()">Invia Richiesta</button>
+      </form>
+    
+      <div class="section admin-section" style="display: none;">
+        <div id="richiesteList">
+          <h3>Richieste in attesa</h3>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Ufficio Section -->
+      
+      <section id="malattie" class="section2" style="display: none;">
+        <h2>Gestione Malattie</h2>
+        <div id="listaMalattie" class="order-window">
+          <h3>Lista Malattie Attive</h3>
+          <ul id="malattieList"></ul>
+        </div>
+        <div id="inserimentoMalattia" class="order-window">
+          <h3>Inserisci Nuova Malattia</h3>
+          <input type="text" id="malattiaNome" placeholder="Nome" required>
+          <input type="text" id="malattiaCognome" placeholder="Cognome" required>
+          <input type="date" id="malattiaStart" placeholder="Dal Giorno" required>
+          <input type="date" id="malattiaEnd" placeholder="Al Giorno" required>
+          <button onclick="aggiungiMalattia()">Aggiungi Malattia</button>
+        </div>
+      </section>
+
+      <section id="formazione" class="section2" style="display: none;">
+        <h2>Gestione Formazioni</h2>
+        <div id="listaFormazioni" class="order-window">
+          <h3>Lista Formazioni Attive</h3>
+          <ul id="formazioneList"></ul>
+        </div>
+        <div id="inserimentoFormazioni" class="order-window">
+          <h3>Inserisci Nuova Formazione</h3>
+          <input type="text" id="formazioneNome" placeholder="Nome e cognome" required>
+          <input type="date" id="formazioneData" placeholder="Giorno" required>
+          <input type="text" id="formazioneTipo" placeholder="Tipo formazione" required>
+          <button onclick="aggiungiFormazioni()">Aggiungi Formazioni</button>
+        </div>
+      </section>
+
+      <section id="tutorial" class="section2" style="display: none;">
+        <h2>Tutorial</h2>
+        <div id="tutorial-menu" class="tutorial-menu"></div>
+        <div class="slideshow-container">
+          <div id="slides-container"></div>
+          <a class="tutorial-prev" onclick="moveSlider(-1)">&#10094;</a>
+          <a class="tutorial-next" onclick="moveSlider(1)">&#10095;</a>
+        </div>
+      </section>
+
+      <section id="contacts-section" class="section2" style="display: none;">
+        <h2>Contatti Aurea S.r.l.</h2>
+        <div class="contact-category">
+        </div>
+      </section>
+
+    <!-- News Section -->
+    <section id="news" class="section" style="display: none;">
+      <h2>News</h2>
+    
+      <!-- Form per aggiungere una nuova news -->
+       
+      <div class="section master-section" style="display: none;">
+        <form id="newsForm">
+          <label for="newsTitle">Titolo:</label>
+          <input type="text" id="newsTitle" required>
+
+          <label for="newsDescription">Descrizione:</label>
+          <textarea id="newsDescription" rows="3" required></textarea>
+        
+          <label for="newsDate">Data:</label>
+          <input type="date" id="newsDate" required>
+          <label for="roleRequired">Ruolo richiesto:</label>
+          <select id="roleRequired" name="roleRequired">
+            <option value="basic">Basic</option>
+            <option value="hospitality">Hospitality</option>
+            <option value="admin">Admin</option>
+            <option value="master">Master</option>
+          </select>
+          <div class="file-upload">
+            <input type="file" id="newsFileInput" multiple accept="image/*,application/pdf" style="display: none;">
+            <label for="newsFileInput" class="file-upload-label">Scegli File</label>
+            <span id="fileName">Nessun file selezionato</span>
+          </div>
+        
+          <button type="button" onclick="salvaNews()">Carica News</button>
+        </form>
+      </div>
+      <div id="newsList">
+        <h3>Lista News</h3>
+        <div id="listaNewsContainer">
+        </div>
+      </div>
+    
+      <div id="carouselNewsModal">
+        <div style="position: relative; margin: auto; padding: 10px;">
+          <button onclick="chiudiCarosello()" style="position: absolute; top: 10px; right: 10px; background: red; color: white; border: none; padding: 5px 10px; cursor: pointer; border-radius: 5px;">Chiudi</button>     
+          <div id="carouselContainerNews">
+          </div>
+          <div id="newsDescriptionContainer">
+            <h3 id="modalTitle"></h3>
+            <p id="modalDescription"></p>
+          </div>  
+          <button onclick="cambiaPaginaCarosello(-1)" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%);">&#9664;</button>
+          <button onclick="cambiaPaginaCarosello(1)" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%);">&#9654;</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Feste -->
+    <section id="calendario" class="section2" style="display: none;">
+      <div id="calendar-section">
+        <h2>Calendario delle Feste</h2>
+        <div id="month-navigation">
+          <button onclick="changeMonth(-1)">◀</button>
+          <span id="current-month"></span>
+          <button onclick="changeMonth(1)">▶</button>
+        </div>          
+        <div id="calendar"></div>
+      </div>
+      <!-- Modal per la lista delle feste -->
+      <div id="event-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+          <h3>Feste per la Data Selezionata</h3>
+          <ul id="event-list"></ul>
+          <button onclick="closeModal()">Chiudi</button>
+        </div>
+      </div>
+      <div id="inserimentoFesta" class="order-window">
+        <h3>Inserisci Nuova Festa</h3>
+        <input type="date" id="festaDate" placeholder="Data della festa" required>
+        <input type="text" id="festaName" placeholder="Gestione/Invitati" required>
+        <input type="time" id="festaTime" placeholder="Orario" step="60" required>
+        <button onclick="aggiungiFesta()">Aggiungi Festa</button>
+      </div>  
+    </section>
+    <section id="item" class="section2" style="display: none;">
+      <div id="ordinifeste" class="order-window">
+        <h2>Gestione Item Feste</h2>
+        <div id="inserimentoOrdineFeste" class="order-window">
+          <h3>Inserisci item mancante o in esaurimento</h3>
+          <textarea id="newOrderTextFest" placeholder="Scrivi il nome dell'item..."></textarea>
+          <button onclick="aggiungiOrdineFeste()">Inserisci il prodotto</button>
+        </div>
+      
+        <div id="visualizzazioneOrdiniFeste" class="order-window">
+          <h3>Elenco Item</h3>
+          <ul id="ordiniListfeste"></ul>
+          <button onclick="caricaOrdiniFeste()">Aggiorna Lista</button>
+        </div>
+      </div>
+    </section>
+    <!-- Numeri Section -->
+    <section id="numeri" class="section2" style="display: none;">
+      <div class="contact-category">
+        <h3>CAFI</h3>
+        <div class="contact-item">
+          <div>
+            <p><strong>Alessandro</strong></p>
+            <p>Cell <a href="tel:+393405811505">3405811505</a></p>
+            <p>Da contattare per: </p>
+            <p>Frigoriferi</p>
+            <p>Celle</p>
+            <p>Macchina del ghiaccio</p>
+            <p>Condizionatori UTA</p>
+            <p>Boiler</p>
+          </div>
+        </div>
+      </div>
+      <div class="contact-category">
+        <h3>ENERGY</h3>
+        <div class="contact-item">
+          <div>
+            <p><strong>Florin</strong></p>
+            <p>Cell <a href="tel:+393669221000">3669221000</a></p>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div>
+            <p><strong>Michele</strong></p>
+            <p>Cell <a href="tel:+393319824408">3319824408</a></p>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div>
+            <p><strong>Nicola</strong></p>
+            <p>Cell <a href="tel:+393501892030">3501892030</a></p>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div>
+            <p>Da contattare per:</p>
+            <p>Toaster</p>
+            <p>Griglie</p>
+            <p>Friggitrici</p>
+            <p>Macchina del gelato</p>
+            <p>Tavoli</p>
+            <p>Rullo</p>
+            <p>Steamer</p>
+          </div>
+        </div>
+      </div>
+      <div class="contact-category">
+        <h3>CIADIT</h3>
+        <div class="contact-item">
+          <div>
+            <p>Mail: <a href="mailto:intervento@ciadit.it">intervento@ciadit.it</a></p>
+            <p>Da contattare per:</p>
+            <p>Disinfestazioni</p>
+          </div>
+        </div>
+      </div>
+      <div class="contact-category">
+        <h3>HAVI</h3>
+        <div class="contact-item">
+          <div>
+            <p>Cell <a href="tel:+390597880282">0597880282</a></p>
+            <p>Da contattare per:</p>
+            <p>Delivery</p>
+          </div>
+        </div>
+      </div>
+      <div class="contact-category">
+        <h3>COCA COLA</h3>
+        <div class="contact-item">
+          <div>
+            <p><strong>Sergio</strong></p>
+            <p>Cell <a href="tel:+393357249610">3357249610</a></p>
+            <p>Da contattare per:</p>
+            <p>Problemi con la linea bibite</p>
+          </div>
+        </div>
+      </div>
+      <div class="contact-category">
+        <h3>INSEA2000</h3>
+        <div class="contact-item">
+          <div>
+            <p>Cell <a href="tel:+39800110960">800110960</a></p>
+            <p>Da contattare per: Autospurgo</p>
+          </div>
+        </div>
+      </div>
+      <div class="contact-category">
+        <h3>CILLIT</h3>
+        <div class="contact-item">
+          <div>
+            <p>Cell <a href="tel:+39067848295">067848295</a></p>
+            <p>Da contattare per:</p>
+            <p>Addolcitore</p>
+          </div>
+        </div>
+      </div>
+      <div class="contact-category">
+        <h3>CIMBALI</h3>
+        <div class="contact-item">
+          <div>
+            <p>Cell <a href="tel:+390645435156">0645435156</a></p>
+            <p>Da contattare per:</p>
+            <p>Assistenza Mccaffè</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  </div>
+</div>
+  <script src="index.js"></script>
+</body>
+</html>

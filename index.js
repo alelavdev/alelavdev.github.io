@@ -1473,7 +1473,7 @@ async function modificaTrasferimento(id) {
     return;
   }
 
-  document.getElementById("localeSelect2").value = trasferimento.locale_trasferimento;
+  document.getElementById("localeSelectTrasferimenti").value = trasferimento.locale_trasferimento;
   document.getElementById("tipoTrasferimento").value = trasferimento.tipo_trasferimento;
   document.getElementById("itemsContainer").innerHTML = "";
 
@@ -1508,7 +1508,7 @@ async function aggiornaTrasferimento() {
     return;
   }
 
-  const locale = document.getElementById("localeSelect2").value;
+  const locale = document.getElementById("localeSelectTrasferimenti").value;
   const tipoTrasferimento = document.getElementById("tipoTrasferimento").value;
 
   const items = Array.from(document.querySelectorAll("#itemsContainer .item")).map(item => {
@@ -1582,6 +1582,16 @@ async function caricaListaLocali() {
     option.textContent = item.locale; 
     localeSelect2.appendChild(option);
   });
+
+  const localeSelectTrasferimenti = document.getElementById("localeSelectTrasferimenti");
+  localeSelectTrasferimenti.innerHTML = "<option value='' disabled selected>Seleziona un locale</option>"; 
+
+  locali.forEach(item => {
+    const option = document.createElement("option");
+    option.value = item.locale;  
+    option.textContent = item.locale; 
+    localeSelectTrasferimenti.appendChild(option);
+  });
 }
 
 function aggiungiItem() {
@@ -1609,7 +1619,7 @@ function aggiungiItem() {
 }
 
 async function salvaTrasferimento() {
-  const locale = document.getElementById("localeSelect2").value;
+  const locale = document.getElementById("localeSelectTrasferimenti").value;
   const tipoTrasferimento = document.getElementById("tipoTrasferimento").value;
 
   const items = Array.from(document.querySelectorAll("#itemsContainer .item")).map(item => {

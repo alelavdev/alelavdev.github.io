@@ -591,19 +591,44 @@ async function login() {
     userLocale = locale;
     uuid = id;
 
+    mostraDatiAccount();
+
     document.getElementById("login-screen").style.display = "none";
     document.getElementById("app-content").style.display = "block";
     usersCredits();
+    caricaAnnunci()
+    caricaLocali()
+    caricaListaLocali()
+    caricaImmaginiOrario()
+    caricaNews();
     showNotification(`Benvenuto ${username}`,"success")
   } else {
     showNotification("Credenziali non valide", "error");
   }
-  caricaAnnunci()
-  caricaLocali()
-  caricaListaLocali()
-  caricaImmaginiOrario()
-  caricaNews();
 }
+
+function mostraDatiAccount() {
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  if (user) {
+    const usernameElem = document.getElementById("account-username");
+    usernameElem.innerText = `Utente: ${user.username}`;
+
+    const usernamePri = document.getElementById("account-privilegi");
+    usernamePri.innerText = `Privilegi: ${user.role}`;
+
+    const localeElem = document.getElementById("account-locale");
+    localeElem.innerText = `Locale: ${user.locale}`;
+  } else {
+    console.warn("Nessun utente trovato!");
+  }
+}
+
+// Mostra i dati subito dopo il caricamento della pagina
+document.addEventListener("DOMContentLoaded", () => {
+  mostraDatiAccount();
+});
+
 
 document.addEventListener("DOMContentLoaded", () => {
   const savedUser = JSON.parse(localStorage.getItem("user"));

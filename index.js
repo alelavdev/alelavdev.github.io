@@ -3,6 +3,10 @@ let userPrivilege = null;
 let userLocale = null;
 let uuid = null;
 
+function goToPage(page) {
+  window.location.href = page;
+}
+
 function initializeSupabase() {
   const SUPABASE_URL = 'https://nxdgrrympafaeomfgcnh.supabase.co';
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im54ZGdycnltcGFmYWVvbWZnY25oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzAyMTU3NzgsImV4cCI6MjA0NTc5MTc3OH0.2nHqAm6XW4DVg-uW2uOfxHqtPYiz3kuyy3Rxa4C3Zpg';
@@ -97,7 +101,6 @@ function showSection(sectionId) {
       section.style.display = 'none'; 
     }
     if (sectionId === 'home') {
-      showNotification('HOME','info');
       caricaPostit();
     }
   });
@@ -642,7 +645,7 @@ function logout() {
 async function creaAccount() {
   const username = document.getElementById("usernameAdd").value.trim();
   const password = document.getElementById("passwordAdd").value.trim();
-  const role = document.getElementById("roleRequired").value;
+  const role = document.getElementById("roleRequiredAccount").value;
   const locale = document.getElementById("localeSelect2").value;
 
   console.log("Valori recuperati:", { username, password, role, locale });

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Allergeni - Informazioni</title>
+  <link rel="stylesheet" href="allergeni.css">
+</head>
+<body>
+  <li><a href="#" onclick="goToPage('index.html')">Torna alla home</button></a>
+
+  <header>
+    <h1>SOSTANZE ALLERGENICHE PRESENTI NEI PRODOTTI</h1>
+    <h3>(Ai sensi dell’art. 44 Reg. CE 1169/2011 e dell’art. 19 D.Lgs. 231/2017)</h3>
+    <p>Aggiornamento: 08/01/2025</p>
+  </header>
+
+  <section id="search">
+    <input type="text" id="search-bar" class="search-bar" placeholder="Cerca prodotto..." oninput="filterTable()">
+  </section>
+
+  <footer>
+    <h3>Legenda</h3>
+    <p>+ = Contiene l'allergene indicato</p>
+    <p>! = Potrebbe contenere l'allergene indicato (non è possibile escluderne la presenza)</p>
+    <p>Consultare un medico per ulteriori informazioni.</p>
+  </footer>
+
+  <section id="allergeni">
+    <table>
+      <thead>
+        <tr>
+          <th>Prodotto</th>
+          <th>Cereali contenenti Glutine</th>
+          <th>Soia</th>
+          <th>Frutta a Guscio</th>
+          <th>Arachidi</th>
+          <th>Sesamo</th>
+          <th>Latte</th>
+          <th>Uova</th>
+          <th>Pesce</th>
+          <th>Crostacei</th>
+          <th>Sedano</th>
+          <th>Anidride solforosa e solfiti</th>
+          <th>Senape</th>
+          <th>Lupini</th>
+          <th>Molluschi</th>
+        </tr>
+      </thead>
+      <tbody id="allergeni-table">
+        <!--  -->
+      </tbody>
+    </table>
+  </section>
+
+  <script src="allergeni.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const allergeniTable = document.getElementById('allergeni-table');
+
+      Object.keys(allergeni).forEach(reparto => {
+        // Aggiunge una riga verde con il nome della sezione
+        const sectionRow = document.createElement('tr');
+        const sectionCell = document.createElement('td');
+        sectionCell.colSpan = 15;
+        sectionCell.textContent = reparto;
+        sectionCell.classList.add('section-header');
+        sectionRow.dataset.section = reparto.toLowerCase();
+        sectionRow.appendChild(sectionCell);
+        allergeniTable.appendChild(sectionRow);
+
+        // Aggiunge i prodotti della sezione
+        allergeni[reparto].forEach(prodotto => {
+          const row = document.createElement('tr');
+          row.dataset.section = reparto.toLowerCase();
+
+          row.innerHTML = `
+            <td>${prodotto.nome}</td>
+            <td>${prodotto.glutine || ''}</td>
+            <td>${prodotto.soia || ''}</td>
+            <td>${prodotto.fruttaAGuscio || ''}</td>
+            <td>${prodotto.arachidi || ''}</td>
+            <td>${prodotto.sesamo || ''}</td>
+            <td>${prodotto.latte || ''}</td>
+            <td>${prodotto.uova || ''}</td>
+            <td>${prodotto.pesce || ''}</td>
+            <td>${prodotto.crostacei || ''}</td>
+            <td>${prodotto.sedano || ''}</td>
+            <td>${prodotto.anidride || ''}</td>
+            <td>${prodotto.senape || ''}</td>
+            <td>${prodotto.lupini || ''}</td>
+            <td>${prodotto.molluschi || ''}</td>
+          `;
+
+          allergeniTable.appendChild(row);
+        });
+      });
+    });
+
+    function filterTable() {
+      const query = document.getElementById('search-bar').value.toLowerCase();
+      const rows = document.querySelectorAll('#allergeni-table tr');
+      let showProducts = false;
+
+      rows.forEach(row => {
+        const isSection = row.classList.contains('section-header');
+        const text = row.textContent.toLowerCase();
+
+        if (isSection) {
+          const matches = text.includes(query);
+          row.style.display = matches ? '' : 'none';
+          showProducts = matches;
+        } else {
+          // Show products if their section matches
+          if (showProducts) {
+            row.style.display = '';
+          } else {
+            row.style.display = text.includes(query) ? '' : 'none';
+          }
+        }
+      });
+    }
+    function goToPage(page) {
+      window.location.href = page;
+    }
+  </script>
+</body>
+</html>

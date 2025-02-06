@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=3.0, user-scalable=yes">
+    <title>Checklist Shift Digitale con Menu</title>
+    <link rel="stylesheet" href="checklist.css">
+    <!-- Aggiungi icone da un servizio come Font Awesome per utilizzare un'icona di lista -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://unpkg.com/pdf-lib"></script>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Checklist Shift Digitale</h1>
+                 <!-- Tasto per Dark Mode -->
+                <label class="switch">
+                    <input type="checkbox" id="theme-toggle">
+                    <span class="slider round"></span>
+                </label >
+                
+                <li><a href="#" onclick="goToPage('index.html')">Torna ad hub</button>
+            <!-- Menu a tendina accanto al titolo -->
+            <div class="menu-accesso">
+                <button id="menu-accesso-btn">
+                    <i class="fas fa-bars"></i> <!-- Icona lista -->
+                </button>
+                <div id="dropdown-accesso" class="dropdown-content">
+                    <a href="#" id="home-page">Home</a>
+                    <a href="#" id="previsioni-orarie">Previsioni Orarie - Obiettivi Turno</a>
+                    <a href="#" id="aree-produzione">Aree di Produzione</a>
+                    <a href="#" id="task-page">Gestione Task</a>
+                    <a href="#" id="post-turno-page">Post turno</a>
+                    <a href="#" id="documentazione-page">Documentazione</a>
+                </div>
+            </div>
+        </div>
+          <div id="documentazione-sezione" class="sezione nascosta">
+                <h2>Documentazione dell'Applicazione</h2>
+                <p>Questa applicazione permette la gestione e l'ottimizzazione del turno di lavoro, con diverse funzionalità. Ecco una breve descrizione:</p>
+                
+                <h3>1. Previsioni Orarie</h3>
+                <p>Questa sezione consente di inserire i dati relativi alle previsioni orarie del turno, inserendo le Gc's nelle rispettive fascie e i valori per MFY, inStore, Drive, Delivery, Patate, e BevCell si possono calcolare le stime e i picchi delle fasce orarie. </p>
+                
+                <h3>2. Aree di Produzione</h3>
+                <p>Permette di controllare le diverse aree di produzione (come MFY, Drive, McDelivery) attraverso una checklist per assicurarsi che tutto sia in ordine.</p>
+                
+                <h3>3. Gestione Task</h3>
+                <p>Questa funzionalità consente di inserire task con la possibilità di organizzarle per categoria e di cercarle tramite una barra di ricerca. Per inserire una task immetti il testo nell'apposita sezione, clicca aggiungi task, scegli la categoria di appartenenza e conferma. Una volta aggiunta, la task diventa cliccabile nella propria categoria, dove si potranno eseguire azioni quali :modificare, aggiungere immagini, completare e eliminare.</p>
+                
+                <h3>4. Post Turno</h3>
+                <p>Qui puoi inserire commenti relativi al turno appena concluso, annotando eventuali colli di bottiglia e obiettivi raggiunti.</p>
+                
+                <h3>5. Esportazione e Importazione</h3>
+                <p>Questa applicazione supporta l'esportazione e l'importazione dei dati per la condivisione del turno.</p>
+          </div>
+
+          
+          <div id="post-turno-sezione" class="sezione nascosta">
+            <h2>Commenti e Analisi del Mio Post Turno</h2>
+
+            <!-- Obiettivi raggiunti -->
+            <label for="obiettivi-raggiunti">Quali Obiettivi sono stati raggiunti?</label>
+            <textarea id="obiettivi-raggiunti" class="post-turno-commenti" rows="3" placeholder="Descrivi gli obiettivi raggiunti..."></textarea>
+        
+            <!-- Colli di bottiglia -->
+            <label for="colli-bottiglia">Quali colli di bottiglia si sono verificati e in che canali? Come li hai gestiti?</label>
+            <textarea id="colli-bottiglia" class="post-turno-commenti" rows="3" placeholder="Descrivi i colli di bottiglia e come li hai gestiti..."></textarea>
+        
+            <!-- Cosa faresti di diverso -->
+            <label for="diverso-problematiche">Cosa faresti di diverso se dovessi riscontrare le stesse problematiche? E cosa faresti uguale?</label>
+            <textarea id="diverso-problematiche" class="post-turno-commenti" rows="3" placeholder="Descrivi cosa faresti di diverso e cosa faresti uguale..."></textarea>
+          </div>
+
+          <!-- Sezione Gestione Task -->
+          <div id="task-page-sezione" class="sezione nascosta">
+              <h2>Gestione Task</h2>
+              <div id="task-container">
+                
+                  <h2>Inserisci una Task</h2>
+                  <input type="text" id="task-input" placeholder="Inserisci una task...">
+                  <button id="add-task">Aggiungi Task</button>
+          
+                  <!-- Selezione della categoria -->
+                  <div id="categoria-container" class="nascosta">
+                      <h3>Seleziona la Categoria</h3>
+                      <select id="categoria-select">
+                          <option value="sicurezza-food-safety">Sicurezza (Food Safety)</option>
+                          <option value="sicurezza-decreto-81">Sicurezza (Decreto 81)</option>
+                          <option value="qualita-servizio">Qualità - Servizio</option>
+                          <option value="comfort">Comfort</option>
+                          <option value="aspetto">Aspetto</option>
+                      </select>
+                      <button id="conferma-categoria">Conferma</button>
+                  </div>
+          
+                  <!-- Elenco Task divise per categorie -->
+                  <h2>Task per Categoria</h2>
+                  <div id="categorie-tasks">
+                       <div class="task-box" id="sicurezza-food-safety">
+                          <h3 class="categoria-titolo">Sicurezza (Food Safety)</h3>
+                       <ul class="task-list"></ul>
+                       </div>
+                       <div class="task-box" id="sicurezza-decreto-81">
+                           <h3 class="categoria-titolo">Sicurezza (Decreto 81)</h3>
+                           <ul class="task-list"></ul>
+                       </div>
+                       <div class="task-box" id="qualita-servizio">
+                           <h3 class="categoria-titolo">Qualità - Servizio</h3>
+                           <ul class="task-list"></ul>
+                       </div>
+                       <div class="task-box" id="comfort">
+                           <h3 class="categoria-titolo">Comfort</h3>
+                           <ul class="task-list"></ul>
+                       </div>
+                       <div class="task-box" id="aspetto">
+                           <h3 class="categoria-titolo">Aspetto</h3>
+                           <ul class="task-list"></ul>
+                       </div>
+                  </div>
+
+                  <!-- Modal per ingrandire l'immagine -->
+                  <div id="image-modal" class="modal nascosta">
+                      <span id="chiudi-immagine">&times;</span>
+                      <img class="modal-content" id="modal-image">
+                  </div>
+                
+                  <input type="text" id="search-task" placeholder="Cerca task...">
+                  <button id="delete-all-tasks">Elimina tutte le Task</button>
+              </div>
+          </div>
+      
+          <!-- Modal per la scelta multipla -->
+          <div id="task-modal" class="modal nascosta">
+              <div class="modal-content">
+                  <h3>Scegli un'opzione per la task</h3>
+                  <button id="modifica-task">Modifica</button>
+                  <button id="scatta-foto">Scatta Foto</button>
+                  <button id="completa-task">Completa</button>
+                  <button id="elimina-task">Elimina</button>
+                  <button id="chiudi-modal">Chiudi</button>
+                  <img id="preview-image-modal" src="" alt="Anteprima Foto" style="display: none; width: 100px; height: auto;">
+              </div>
+          </div>
+      
+          <!-- Modale per la scelta di esportazione -->
+          <div id="export-modal" class="modal nascosta">
+              <div class="modal-content">
+                  <h3>Scegli un'opzione</h3>
+                  <button id="download-file">Scarica File</button>
+                  <!--button id="share-file">Condividi File</button-->
+                  <button id="chiudi-modal-export">Chiudi</button>
+              </div>
+          </div>
+
+      
+        <!-- Sezione Home -->
+        <div id="home-sezione" class="sezione">
+            
+      
+            <!-- Sezione Informazioni Turno -->
+            <div id="informazioni-turno">
+                <h2>Informazioni Turno</h2>
+                <label for="manager-name">Nome del Manager:</label>
+                <input type="text" id="manager-name" placeholder="Inserisci il nome del Manager">
+                
+                <label for="data-turno">Data:</label>
+                <input type="date" id="data-turno">
+                
+                <label for="shift-part">Shift Part:</label>
+                <input type="text" id="shift-part" placeholder="Inserisci la Shift Part">
+            </div>
+            <button id="generate-pdf">Genera PDF</button>
+            <button id="export-button">Esporta dati</button>
+            <input type="file" id="import-input" style="display:none;">
+            <button id="import-button">Importa dati</button>
+            <button id="clear-all-button">Cancella Tutto</button>
+
+            <h2>Principi Generali</h2>
+            <ul class="promemoria">
+                <li>Prendere informazioni sul turno precedente</li>
+                <li>Controllare le previsioni di vendita per canale</li>
+                <li>Regola 24/2 applicata</li>
+                <li>Osservare con gli occhi del cliente</li>
+                <li>Persone posizionate nelle postazioni in base all VLH ***</li>
+                <li>Assi al loro posto</li>
+                <li>Assistere e posizionare il personale nelle postazioni</li>
+                <li>Piani di riferimento aggiornati e presenti</li>
+                <li>Assegnare le mansioni secondarie e gli obiettivi</li>
+            </ul>
+            <h2>Commenti</h2>
+            <textarea id="commenti-analisi" placeholder="* Verificare se OGGI ci sono condizioni diverse rispetto a quelle precedentemente considerate durante le previsioni di vendita (eventi - promozioni - condizioni atmosferiche etc.) che potrebbero modificare l'andamento del turno.
+** L'esperienza positiva genera vendite! Gestisci dal posto di osservazione e intervieni nelle zone di pericolo.
+*** E' fondamentale che le VLH siano correttamente aggiornate, verifica sempre la pianificazione il giorno prima e controlla il corretto posizionamento delle persone in base ai picchi previsti e alle condizioni del tuo ristorante."></textarea>
+        </div>
+
+        <!-- Sezione Aree di Produzione con pulsanti -->
+        <div id="aree-produzione-sezione" class="sezione nascosta">
+            <h2>Aree di Produzione</h2>
+          
+            <div class="area-produzione">
+              <button class="area-btn" data-area="produzione">Aree di Produzione, Patate & Bevande</button>
+                <div id="produzione" class="componenti-area nascosta">
+                    <form id="produzione-form">
+                      <label>
+                          <input type="checkbox" id="allestimento-linee"> • Tutte le linee MFY sono allestite e funzionanti.
+                      </label>
+                      <label>
+                          <input type="checkbox" id="scadenze-secondarie"> • Scadenze secondarie applicate(es.tavolo condimenti).
+                      </label>
+                      <label>
+                          <input type="checkbox" id="tavoli-preparazione"> • Tavoli di preparazione allestiti secondo i principi di ergonomia.
+                      </label>
+                      <label>
+                          <input type="checkbox" id="e-production"> • E-productionaggiornata e monitor accesi.
+                      </label>
+                      <label>
+                          <input type="checkbox" id="verifica-compressione-toaster"> • Verifica compressione Toaster.
+                      </label>
+                      <label>
+                          <input type="checkbox" id="small-equipment"> • Small Equipment presente e in buono stato.
+                      </label>
+                      <label>
+                          <input type="checkbox" id="monitor-look-bump-cook"> • Monitor Look/Bump/Cook acceso e funzionante.
+                      </label>
+                      <label>
+                          <input type="checkbox" id="verifica-co2"> • Verifica livelli Co2 e bombole assicurate con apposite catenelle • Verifica presenza ghiaccio.
+                      </label>
+                    </form>
+                </div>
+            </div>
+
+            <div class="area-produzione">
+                <button class="area-btn" data-area="drive-mcdelivery">Drive & McDelivery</button>
+                <div id="drive-mcdelivery" class="componenti-area nascosta">
+                <form id="drive-form">
+                  <label>
+                      <input type="checkbox" id="sistema-monitor-drive-delivery"> • Tutti i Monitor (Drive e Delivery), casse e sistema cuffie funzionanti e correttamente impostati.
+                  </label>
+                  <label>
+                      <input type="checkbox" id="corsia-esterna"> • Area esterna e corsia in ordine e pulite; verifica accensione luci.
+                  </label>
+                </form>
+                </div>
+            </div>
+            
+            <div class="area-produzione">
+                <button class="area-btn" data-area="mccafe">McCafè</button>
+                <div id="mccafe" class="componenti-area nascosta">
+                  <form id="mccafe-form">
+                    <label>
+                        <input type="checkbox" id="macinino-macchina"> • Macchina del caffè e macinino calibrati e funzionanti.
+                    </label>
+                    <label>
+                        <input type="checkbox" id="vetrina"> • Vetrina allestita secondo pmix e linee guida generali.
+                    </label>
+                  </form>
+                </div>
+            </div>
+            
+            <div class="area-produzione">
+                <button class="area-btn" data-area="front-oa-areamps">Front, OA e Area Mps</button>
+                <div id="front-oa-areamps" class="componenti-area nascosta">
+                  <form id="front-form">
+                    <label>
+                        <input type="checkbox" id="vassoi"> • Vassoi puliti disponibili in quantità.
+                    </label>
+                    <label>
+                        <input type="checkbox" id="complementi-servizio-famiglie"> • Complementi al servizio per famiglie presenti e in buono stato.
+                    </label>
+                    <label>
+                        <input type="checkbox" id="tavoli-assemblaggio"> • Tavoli di assemblaggio allestiti secondo i principi di ergonomia.
+                    </label>
+                    <label>
+                        <input type="checkbox" id="numeri-sat"> • Numeri SAT presenti e in buono stato.
+                    </label>
+                    <label>
+                        <input type="checkbox" id="kiosk"> • Kiosk funzionanti e aggiornati, scontrino presente.
+                    </label>
+                  </form>
+                </div>
+            </div>
+            
+            <div class="area-produzione">
+                <button class="area-btn" data-area="retro-celle-magazzini">Retro - Celle e magazzini</button>
+                <div id="retro-celle-magazzini" class="componenti-area nascosta">
+                  <form id="retro-celle-form">
+                    <label>
+                        <input type="checkbox" id="lavaggio"> • Zona lavaggio in ordine e organizzata.
+                    </label>
+                    <label>
+                        <input type="checkbox" id="secchi-panni"> • Secchi panni e sanitizzante presente.
+                    </label>
+                    <label>
+                        <input type="checkbox" id="celle-fifo"> • Celle in ordine e pulite; FIFO rispettata.
+                    </label>
+                    <label>
+                        <input type="checkbox" id="magazzino-fifo"> • Magazzino in ordine e pulito; FIFO rispettata.
+                    </label>
+                    <label>
+                        <input type="checkbox" id="crewroom-ufficio-spogliatoi"> • Crew Room, ufficio e spogliatoi in ordine e puliti.
+                    </label>
+                  </form>
+                </div>
+            </div>
+            
+            <div class="area-produzione">
+                <button class="area-btn" data-area="decreto81">Decreto 81: Controlli Preposto</button>
+                <div id="decreto81" class="componenti-area nascosta">
+                <form id="decreto81-form">
+                  <label>
+                      <input type="checkbox" id="pavimenti"> • Tutti i pavimenti, specie zona friggitrici, scale e ingresso in sicurezza (asciutte, senza danni al rivestimento e non scivolose).
+                  </label>
+                  <label>
+                      <input type="checkbox" id="uscite-emergenza"> • Uscite di emergenza fruibili, apribili e senza intralci.
+                  </label>
+                  <label>
+                      <input type="checkbox" id="maniglioni"> • Maniglioni di emergenza celle funzionanti e con catarifrangenti interni, pavimenti senza ghiaccio.
+                  </label>
+                  <label>
+                      <input type="checkbox" id="macchinari"> • Macchinari funzionanti correttamente, blocchi di sicurezza e pulsanti di emergenza funzionanti; (es fermo taglia pomodori e pulsanti nastro trasportatore).
+                  </label>
+                  <label>
+                      <input type="checkbox" id="cavi"> • Non sono visibili cavi elettrici liberi o danneggiati.
+                  </label>
+                  <label>
+                      <input type="checkbox" id="centralina"> • Centralina antincendio non in guasto/tacitata (spie di allarme/guasto non accesa).
+                  </label>
+                  <label>
+                      <input type="checkbox" id="dpi"> • Tutti i DPI di squadra sono disponibili, puliti ed in buone condizioni (dpi per filtraggio, giacche celle, ecc).
+                  </label>
+                  <label>
+                      <input type="checkbox" id="trasporto-merci"> • Dispositivi per il trasporto merci non danneggiati (Transpallet, carrellini, elefantino).
+                  </label>
+                </form>
+                </div>
+            </div>
+         </div>
+
+        <div id="previsioni-orarie-sezione" class="sezione nascosta">
+            <h2>Previsioni Orarie - I miei obiettivi del turno</h2>
+                 <!-- Riga per inserimento valori stime-->
+                <div class="inserimento-valori">
+                  <h3>Inserisci i valori per il calcolo delle stime:</h3>
+                    <div class="tabella-responsive">
+                        <table>
+                          <tr>
+                            <th>MFY</th>
+                            <th>inStore</th>
+                            <th>Drive</th>
+                            <th>Delivery</th>
+                            <th>Patate</th>
+                            <th>Bev Cell</th>
+                          </tr>
+                          <tr>
+                            <td><input type="number" id="mfy-input" placeholder="MFY %"></td>
+                            <td><input type="number" id="instore-input" placeholder="inStore %"></td>
+                            <td><input type="number" id="drive-input" placeholder="Drive %"></td>
+                            <td><input type="number" id="delivery-input" placeholder="Delivery %"></td>
+                            <td><input type="number" id="patate-input" placeholder="Patate %"></td>
+                            <td><input type="number" id="bevcell-input" placeholder="BevCell %"></td>
+                          </tr>
+                        </table>    
+                    </div>
+                </div>
+                <!-- Riga per inserimento valori picchi-->
+               <div class="inserimento-valori">
+                 <h3>Inserisci i valori per il calcolo dei picchi:</h3>
+                   <div class="tabella-responsive">
+                       <table>
+                         <tr>
+                           <th>GcS</th> 
+                           <th>MFY</th>
+                           <th>inStore</th>
+                           <th>Drive</th>
+                           <th>Delivery</th>
+                         </tr>
+                         <tr>
+                           <td><input type="number" id="gcspicchi-input" placeholder="GcS %"></td>
+                           <td><input type="number" id="mfypicchi-input" placeholder="MFY %"></td>
+                           <td><input type="number" id="instorepicchi-input" placeholder="inStore %"></td>
+                           <td><input type="number" id="drivepicchi-input" placeholder="Drive %"></td>
+                           <td><input type="number" id="deliverypicchi-input" placeholder="Delivery %"></td>
+                         </tr>
+                       </table>    
+                   </div>
+               </div>
+            <!-- Tabella 1: Stima e Reale per Previsioni -->
+            <h3>Previsioni Orarie - Prima fascia oraria <button id="calcola-btn-1" class="calcola-btn">Calcola</button></h3>
+            <form id="previsioni-orarie-form-1">
+              <div class="tabella-responsive">
+                <table>
+                    <tr>
+                        <td><input type="number" maxlength="4" placeholder="ORA"></td>
+                        <th>Gc's</th>
+                        <th>Sales</th>
+                        <th>MFY</th>
+                        <th>Inst</th>
+                        <th>Auto</th>
+                        <th>McDel</th>
+                        <th>Patate</th>
+                        <th>Bev Cell</th>
+                    </tr>
+                    <tr>
+                        <td>Stima</td>
+                        <td><input type="number" class="previsioni-input" id="gcs-stima-1" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="sales-stima-1" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="mfy-stima-1" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="inst-stima-1" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="auto-stima-1" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="mcdel-stima-1" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="patate-stima-1" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="bevcell-stima-1" maxlength="4"></td>
+                    </tr>
+                    <tr>
+                        <td>Reale</td>
+                        <td><input type="number" class="previsioni-input" id="gcs-reale-1" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="sales-reale-1" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="mfy-reale-1" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="inst-reale-1" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="auto-reale-1" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="mcdel-reale-1" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="patate-reale-1" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="bevcell-reale-1" maxlength="4"></td>
+                    </tr>
+                    <tr>
+                        <td>Picco Prev 1/4 ora</td>
+                        <td><input type="number" class="previsioni-input" id="gcs-picco-1" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="sales-picco-1" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="mfy-picco-1" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="inst-picco-1" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="auto-picco-1" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="mcdel-picco-1" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="patate-picco-1" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="bevcell-picco-1" maxlength="4"></td>
+                    </tr>
+                    <tr>
+                        <td>Reale Picco</td>
+                        <td><input type="number" class="previsioni-input" id="gcs-piccoreale-1" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="sales-piccoreale-1" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="mfy-piccoreale-1" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="inst-piccoreale-1" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="auto-piccoreale-1" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="mcdel-piccoreale-1" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="patate-piccoreale-1" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="bevcell-piccoreale-1" maxlength="4"></td>
+                    </tr>
+                </table>
+               </div>
+            </form>
+        
+            <!-- Tabella 2: Stima e Reale per Previsioni -->
+            <h3>Previsioni Orarie - Seconda fascia oraria <button id="calcola-btn-2" class="calcola-btn">Calcola</button></h3>
+            <form id="previsioni-orarie-form-1">
+              <div class="tabella-responsive">
+                <table>
+                    <tr>
+                        <td><input type="number" maxlength="4" placeholder="ORA"></td>
+                        <th>Gc's</th>
+                        <th>Sales</th>
+                        <th>MFY</th>
+                        <th>Inst</th>
+                        <th>Auto</th>
+                        <th>McDel</th>
+                        <th>Patate</th>
+                        <th>Bev Cell</th>
+                    </tr>
+                    <tr>
+                        <td>Stima</td>
+                        <td><input type="number" class="previsioni-input" id="gcs-stima-2" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="sales-stima-2" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="mfy-stima-2" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="inst-stima-2" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="auto-stima-2" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="mcdel-stima-2" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="patate-stima-2" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="bevcell-stima-2" maxlength="4"></td>
+                    </tr>
+                    <tr>
+                        <td>Reale</td>
+                        <td><input type="number" class="previsioni-input" id="gcs-reale-2" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="sales-reale-2" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="mfy-reale-2" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="inst-reale-2" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="auto-reale-2" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="mcdel-reale-2" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="patate-reale-2" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="bevcell-reale-2" maxlength="4"></td>
+                    </tr>
+                    <tr>
+                        <td>Picco Prev 1/4 ora</td>
+                        <td><input type="number" class="previsioni-input" id="gcs-picco-2" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="sales-picco-2" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="mfy-picco-2" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="inst-picco-2" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="auto-picco-2" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="mcdel-picco-2" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="patate-picco-2" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="bevcell-picco-2" maxlength="4"></td>
+                    </tr>
+                    <tr>
+                        <td>Reale Picco</td>
+                        <td><input type="number" class="previsioni-input" id="gcs-piccoreale-2" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="sales-piccoreale-2" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="mfy-piccoreale-2" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="inst-piccoreale-2" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="auto-piccoreale-2" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="mcdel-piccoreale-2" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="patate-piccoreale-2" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="bevcell-piccoreale-2" maxlength="4"></td>
+                    </tr>
+                </table>
+               </div>
+            </form>
+        
+            <!-- Tabella 3: Stima e Reale per Previsioni -->
+            <h3>Previsioni Orarie - Terza fascia oraria <button id="calcola-btn-3" class="calcola-btn">Calcola</button></h3>
+            <form id="previsioni-orarie-form-1">
+              <div class="tabella-responsive">
+                <table>
+                    <tr>
+                        <td><input type="number" maxlength="4" placeholder="ORA"></td>
+                        <th>Gc's</th>
+                        <th>Sales</th>
+                        <th>MFY</th>
+                        <th>Inst</th>
+                        <th>Auto</th>
+                        <th>McDel</th>
+                        <th>Patate</th>
+                        <th>Bev Cell</th>
+                    </tr>
+                    <tr>
+                        <td>Stima</td>
+                        <td><input type="number" class="previsioni-input" id="gcs-stima-3" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="sales-stima-3" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="mfy-stima-3" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="inst-stima-3" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="auto-stima-3" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="mcdel-stima-3" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="patate-stima-3" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="bevcell-stima-3" maxlength="4"></td>
+                    </tr>
+                    <tr>
+                        <td>Reale</td>
+                        <td><input type="number" class="previsioni-input" id="gcs-reale-3" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="sales-reale-3" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="mfy-reale-3" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="inst-reale-3" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="auto-reale-3" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="mcdel-reale-3" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="patate-reale-3" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="bevcell-reale-3" maxlength="4"></td>
+                    </tr>
+                    <tr>
+                        <td>Picco Prev 1/4 ora</td>
+                        <td><input type="number" class="previsioni-input" id="gcs-picco-3" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="sales-picco-3" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="mfy-picco-3" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="inst-picco-3" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="auto-picco-3" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="mcdel-picco-3" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="patate-picco-3" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="bevcell-picco-3" maxlength="4"></td>
+                    </tr>
+                    <tr>
+                        <td>Reale Picco</td>
+                        <td><input type="number" class="previsioni-input" id="gcs-piccoreale-3" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="sales-piccoreale-3" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="mfy-piccoreale-3" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="inst-piccoreale-3" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="auto-piccoreale-3" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="mcdel-piccoreale-3" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="patate-piccoreale-3" maxlength="4"></td>
+                        <td><input type="number" class="previsioni-input" id="bevcell-piccoreale-3" maxlength="4"></td>
+                    </tr>
+                </table>
+               </div>
+            </form>
+        
+            <!-- Tabella 4: Obiettivi del Turno -->
+            <h3>Obiettivi del Turno - Tabella 4</h3>
+            <form id="obiettivi-turno-form">
+              <div class="tabella-responsive">
+                <table id="tabella-obiettivi">
+                    <tr>
+                        <th></th>
+                        <th>TREND</th>
+                        <th>OBJ</th>
+                        <th>REAL</th>
+                    </tr>
+                    <!-- Riga di base -->
+                    <tr>
+                        <td><input type="text" class="obiettivi-input" maxlength="20" placeholder="Inserisci testo..."></td>
+                        <td><textarea rows="2" class="obiettivi-input" placeholder="Inserisci commento..."></textarea></td>
+                        <td><textarea rows="2" class="obiettivi-input" placeholder="Inserisci commento..."></textarea></td>
+                        <td><textarea rows="2" class="obiettivi-input" placeholder="Inserisci commento..."></textarea></td>
+                    </tr>
+                </table>
+              </div>
+              
+                <!-- Pulsante per aggiungere una riga -->
+                <button type="button" id="aggiungi-riga">Aggiungi una riga</button>
+            </form>
+        
+            <script src="checklist.js"></script>
+        </div>
+  </div>
+</body>
+</html>

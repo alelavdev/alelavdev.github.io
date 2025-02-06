@@ -1,0 +1,776 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+h1 {
+    margin: 0;
+}
+
+h2 {
+    margin-bottom: 15px;
+    font-size: 1.5em;
+    color: #333;
+}
+
+h3 {
+    margin-bottom: 15px;
+}
+
+#informazioni-turno {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+#informazioni-turno label {
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+#informazioni-turno input[type="text"],
+#informazioni-turno input[type="date"] {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+
+.menu-accesso {
+    position: relative;
+    display: inline-block;
+}
+
+.menu-accesso button {
+    background-color: #333;
+    color: white;
+    border: none;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.menu-accesso button:hover {
+    background-color: #555;
+}
+
+.menu-accesso .dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: white;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+.menu-accesso .dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.menu-accesso .dropdown-content a:hover {
+    background-color: #ddd;
+}
+
+.menu-accesso:hover .dropdown-content {
+    display: block;
+}
+
+/* Aggiungiamo uno stile per visualizzare gli elementi delle sezioni in colonna */
+.sezione form {
+    display: flex;
+    flex-direction: column;
+}
+
+.sezione form label {
+    margin-bottom: 15px; troppo vicini */
+    font-size: 1.1em;
+}
+
+input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+.promemoria {
+    list-style-type: none;
+    padding: 0;
+    margin-top: 10px;
+}
+
+.promemoria li {
+    background-color: #f9f9f9;
+    padding: 10px;
+    border: 1px solid #ddd;
+    margin-bottom: 5px;
+    border-radius: 5px;
+}
+
+textarea {
+    width: 100%;
+    height: 150px;
+    padding: 10px;
+    font-size: 1em;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-bottom: 20px;
+}
+
+/* Ottimizzazione della tabella per le previsioni orarie */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+/* Imposta la larghezza minima solo per la tabella "Obiettivi del Turno" */
+#tabella-obiettivi th, #tabella-obiettivi td {
+    min-width: 100px;
+    padding: 8px;
+    text-align: center;
+}
+
+/* Le altre tabelle rimangono compatte */
+table th, table td {
+    width: auto;
+    padding: 8px;
+    text-align: center;
+}
+
+/* Rendi le tabelle scrollabili su dispositivi mobili */
+.tabella-responsive {
+    overflow-x: auto;
+}
+
+/* Media query per rendere le tabelle più responsive su dispositivi mobili */
+@media (max-width: 768px) {
+    #tabella-obiettivi th, #tabella-obiettivi td {
+        font-size: 14px;
+        padding: 6px;
+    }
+    table th, table td {
+        font-size: 12px;
+    }
+}
+
+input[type="number"] {
+    width: 60px;
+    padding: 5px;
+    font-size: 1em;
+    text-align: center;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.sezione {
+    margin-bottom: 30px;
+}
+
+/* Pulsanti per le Aree di Produzione */
+.aree-produzione-bottoni {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.area-btn {
+    background-color: #333;
+    color: white;
+    border: none;
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%; 
+}
+
+.area-btn:hover {
+    background-color: #555;
+}
+
+/* Stile componenti area */
+.componenti-area {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border: 1px solid #ddd;
+    margin-top: 20px;
+    border-radius: 5px;
+}
+
+/* Nascondi le sezioni non selezionate */
+.nascosta {
+    display: none;
+}
+
+/* Stili per il task manager */
+.task-rossa {
+    color: red;
+}
+
+.task-verde {
+    color: green;
+}
+
+#categoria-container {
+    display: none;
+}
+
+.task-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.task-list li {
+    padding: 10px;
+    margin-bottom: 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Stili per il modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+    background-color: white;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 300px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.modal-img {
+    margin: auto;
+    padding: 20px;
+    display: block;
+    width: 80%;
+    max-width: 700px;
+    width: 100%;
+    height: auto;
+}
+
+button {
+    margin: 10px;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+#task-input {
+    width: 100%;
+    height: 50px;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+}
+
+/* Stile per il riquadro delle categorie */
+.task-box {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
+}
+
+/* Stile per i titoli delle categorie */
+.categoria-titolo {
+    font-size: 18px;
+    margin-bottom: 10px;
+    font-weight: bold;
+    text-align: center;
+}
+
+#categoria-select {
+    width: 100%;
+    padding: 10px;
+    font-size: 18px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+}
+
+
+/* Stile per la barra di ricerca e il pulsante */
+#search-task {
+    width: 80%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+}
+
+#delete-all-tasks {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+#delete-all-tasks:hover {
+    background-color: #c0392b;
+}
+
+/* Stili per l'area di commenti post turno */
+#post-turno-sezione {
+    padding: 20px;
+    background-color: #f4f4f4;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+#post-turno-sezione label {
+    font-size: 16px;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+#post-turno-sezione textarea {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-bottom: 20px;
+    resize: vertical;
+}
+
+#post-turno-sezione h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+/* Stile per l'interruttore */
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+    margin-left: 20px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #2196F3;
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+/* Modalità scura completa */
+body.dark-mode {
+    background-color: #121212;  /* Sfondo scuro */
+    color: #f9f9f9;  /* Testo chiaro */
+}
+
+/* Contenitori generali */
+body.dark-mode .container, body.dark-mode .header, body.dark-mode .section, body.dark-mode .form-section {
+    background-color: #1e1e1e;  /* Colore scuro per i contenitori */
+    color: #f9f9f9;  /* Colore del testo */
+}
+
+/* Input e textarea */
+body.dark-mode input, body.dark-mode textarea, body.dark-mode select {
+    background-color: #333;  /* Sfondo scuro per i campi input */
+    color: #f9f9f9;  /* Testo chiaro */
+    border: 1px solid #555;  /* Bordo scuro */
+}
+
+/* Checkbox */
+body.dark-mode input[type="checkbox"] {
+    accent-color: #007bff;  /* Cambia il colore delle checkbox */
+}
+
+/* Pulsanti generali */
+body.dark-mode button, body.dark-mode .task-button, body.dark-mode .action-btn {
+    background-color: #555;  /* Sfondo scuro per i pulsanti */
+    color: #f9f9f9;  /* Testo chiaro per i pulsanti */
+    border: 1px solid #444;  /* Bordo scuro */
+}
+
+/* Titoli e testo */
+body.dark-mode h1, body.dark-mode h2, body.dark-mode h3, body.dark-mode label, body.dark-mode p {
+    color: #f9f9f9;  /* Colore chiaro per i titoli e il testo */
+}
+
+/* Campi di input specifici */
+body.dark-mode input[type="text"], body.dark-mode input[type="number"], body.dark-mode input[type="date"] {
+    background-color: #333;  /* Sfondo scuro per gli input */
+    color: #f9f9f9;  /* Testo chiaro */
+    border: 1px solid #555;  /* Bordo scuro */
+}
+
+/* Link */
+body.dark-mode a {
+    color: #1e90ff;  /* Colore per i link */
+}
+
+/* Sezioni di testo */
+body.dark-mode .input-section, body.dark-mode .text-section {
+    background-color: #333;  /* Sfondo scuro per le sezioni di testo */
+    color: #f9f9f9;  /* Testo chiaro */
+    border: 1px solid #444;  /* Bordo scuro */
+}
+
+/* Pulsanti specifici */
+body.dark-mode .button, body.dark-mode .submit-btn, body.dark-mode .delete-btn {
+    background-color: #444;  /* Sfondo scuro per pulsanti di azione */
+    color: #f9f9f9;  /* Testo chiaro */
+}
+
+/* Margini e padding */
+body.dark-mode .form-group, body.dark-mode .task-list {
+    margin-bottom: 20px;  /* Margine inferiore uniforme */
+}
+
+/* Nascondi il contenitore della lista dei task quando è vuoto */
+body.dark-mode .task-list:empty {
+    display: none;  /* Nasconde la lista dei task se è vuota */
+}
+
+/* Sezioni di titolo */
+body.dark-mode .header-title, body.dark-mode .section-title {
+    background-color: #1e1e1e;
+    color: #f9f9f9;
+    padding: 10px;
+    border-bottom: 2px solid #444;
+}
+
+/* Bordo di focus per input */
+body.dark-mode input:focus, body.dark-mode textarea:focus {
+    border-color: #007bff;  /* Colore blu per il bordo quando è in focus */
+    outline: none;  /* Rimuove il bordo di default */
+}
+
+/* Modalità scura per le liste */
+body.dark-mode ul, body.dark-mode li {
+    background-color: #1e1e1e;  /* Sfondo scuro per le liste */
+    color: #f9f9f9;  /* Testo chiaro per le liste */
+    border: 1px solid #444;  /* Bordo scuro */
+    padding: 10px;
+    margin-bottom: 10px;
+    list-style-type: none; /* Se desideri mantenere il simbolo per gli elenchi */
+}
+
+/* Modalità scura per la sezione Area di Produzione */
+body.dark-mode .area-produzione {
+    background-color: #1e1e1e;  /* Sfondo scuro per l'intera area */
+    color: #f9f9f9;  /* Testo chiaro */
+    border: 1px solid #333;  /* Bordo scuro */
+    padding: 10px;
+    border-radius: 5px;  /* Aggiungi un po' di arrotondamento */
+}
+
+/* Stili per i label in modalità scura */
+body.dark-mode label {
+    color: #f9f9f9;  /* Colore chiaro per il testo dei checkbox */
+    background-color: #333;  /* Sfondo per i label */
+    border-radius: 4px;  /* Arrotonda i bordi */
+    padding: 5px 10px;
+    display: block;
+    margin-bottom: 10px;  /* Spazio tra i checkbox */
+}
+
+/* Stili per i checkbox */
+body.dark-mode input[type="checkbox"] {
+    accent-color: #007bff;  /* Colore per il checkbox selezionato */
+    margin-right: 10px;  /* Spazio tra il checkbox e il testo */
+}
+
+/* Stili per i bottoni */
+body.dark-mode .area-btn {
+    background-color: #444;  /* Sfondo scuro per i bottoni */
+    color: #f9f9f9;  /* Testo chiaro per i bottoni */
+    border: 1px solid #555;  /* Bordo scuro */
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 4px;  /* Arrotondamento */
+}
+
+body.dark-mode .area-btn:hover {
+    background-color: #555;  /* Cambia colore al passaggio del mouse */
+}
+
+/* Assicurati che il testo sia visibile all'interno dei task */
+body.dark-mode .task-item {
+    background-color: #444;  /* Sfondo scuro per i task */
+    color: #f9f9f9;  /* Testo chiaro */
+    padding: 10px;
+    margin-bottom: 10px;  /* Spazio tra i task */
+    border: 1px solid #555;  /* Bordo scuro */
+    border-radius: 4px;  /* Arrotondamento dei bordi */
+}
+
+/* Modalità scura per il contenitore dei task */
+body.dark-mode .task-box {
+    background-color: #1e1e1e;  /* Sfondo scuro per il box */
+    color: #f9f9f9;  /* Testo chiaro */
+    border: 1px solid #444;  /* Bordo scuro */
+    padding: 15px;
+    border-radius: 5px;  /* Arrotonda i bordi */
+    margin-bottom: 20px;  /* Spazio tra le task-box */
+}
+
+/* Modalità scura per il contenitore dei task */
+body.dark-mode .switch {
+    background-color: #1e1e1e;  /* Sfondo scuro per il box */
+    color: #f9f9f9;  /* Testo chiaro */
+    border: 1px solid #444;  /* Bordo scuro */
+    padding: 15px;
+    border-radius: 5px;  /* Arrotonda i bordi */
+    margin-bottom: 20px;  /* Spazio tra le task-box */
+}
+
+/* Stili per i titoli delle categorie */
+body.dark-mode .categoria-titolo {
+    background-color: transparent;  /* Rimuove lo sfondo */
+    border: none;  /* Rimuove il bordo */
+    color: #f9f9f9;  /* Mantiene il testo chiaro */
+    font-weight: bold;  /* Facoltativo: rende il testo più marcato */
+    padding: 0;  /* Rimuove eventuale padding */
+    margin: 0;  /* Rimuove eventuali margini */
+    text-align: center;  /* Centra il testo */
+}
+
+/* Modalità scura per il contenitore dell'area di produzione */
+body.dark-mode .componenti-area {
+    background-color: #1e1e1e;  /* Sfondo scuro per l'intero contenitore */
+    color: #f9f9f9;  /* Testo chiaro */
+    border: 1px solid #444;  /* Bordo scuro */
+    padding: 15px;
+    border-radius: 5px;  /* Arrotonda i bordi */
+    margin-bottom: 20px;  /* Spazio tra il contenitore e altri elementi */
+}
+
+/* Modalità scura per i label e input nella lista */
+body.dark-mode label {
+    background-color: #333;  /* Sfondo scuro per ciascun task */
+    color: #f9f9f9;  /* Testo chiaro */
+    padding: 10px;
+    margin-bottom: 10px;  /* Spazio tra gli elementi della lista */
+    border-radius: 4px;  /* Arrotonda i bordi */
+    display: block;  /* Ogni task occupa l'intera riga */
+}
+
+/* Checkbox specifici */
+body.dark-mode input[type="checkbox"] {
+    accent-color: #007bff;  /* Cambia il colore della spunta */
+    margin-right: 10px;  /* Spazio tra la checkbox e il testo */
+}
+
+/* Modalità scura per la sezione post turno */
+body.dark-mode #post-turno-sezione {
+    background-color: #1e1e1e;  /* Sfondo scuro per l'intera sezione */
+    color: #f9f9f9;  /* Testo chiaro */
+    padding: 20px;
+    border-radius: 5px;
+    border: 1px solid #444;  /* Bordo scuro */
+    margin-bottom: 20px;  /* Spazio tra la sezione e gli altri elementi */
+}
+
+/* Modalità scura per i titoli e i campi di testo */
+body.dark-mode #post-turno-sezione h3, body.dark-mode #post-turno-sezione label {
+    color: #f9f9f9;  /* Colore chiaro per i titoli e le etichette */
+}
+
+body.dark-mode #post-turno-sezione textarea {
+    background-color: #333;  /* Sfondo scuro per i campi di testo */
+    color: #f9f9f9;  /* Testo chiaro */
+    border: 1px solid #555;  /* Bordo scuro */
+    padding: 10px;
+    border-radius: 4px;  /* Arrotondamento per i campi di testo */
+}
+
+/* Modalità scura per la finestra modale */
+body.dark-mode .modal-content {
+    background-color: #1e1e1e;  /* Sfondo scuro per il modale */
+    color: #f9f9f9;  /* Testo chiaro */
+    border: 1px solid #444;  /* Bordo scuro */
+    padding: 20px;
+    border-radius: 10px;  /* Arrotondamento dei bordi */
+}
+
+/* Pulsanti all'interno del modale */
+body.dark-mode .modal button {
+    background-color: #444;  /* Sfondo scuro per i pulsanti */
+    color: #f9f9f9;  /* Testo chiaro */
+    border: 1px solid #555;  /* Bordo scuro */
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+body.dark-mode .modal button:hover {
+    background-color: #555;  /* Colore più chiaro al passaggio del mouse */
+}
+
+/* Modalità scura per la sezione documentazione */
+body.dark-mode #documentazione-sezione {
+    background-color: #1e1e1e; /* Sfondo scuro */
+    color: #f9f9f9; /* Testo chiaro */
+    border: 1px solid #444; /* Bordo scuro */
+}
+
+body.dark-mode #documentazione-sezione h2 {
+    color: #f9f9f9; /* Colore chiaro per il titolo principale */
+}
+
+body.dark-mode #documentazione-sezione h3 {
+    color: #1e90ff; /* Colore chiaro per i sottotitoli */
+}
+
+body.dark-mode #documentazione-sezione p {
+    color: #cccccc; /* Testo grigio chiaro per una buona leggibilità */
+}
+
+#documentazione-sezione {
+    padding: 20px;
+    background-color: #f9f9f9; /* Sfondo leggero */
+    border-radius: 8px; /* Arrotonda i bordi */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Aggiungi una leggera ombra */
+}
+
+#documentazione-sezione h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333; /* Colore scuro per il titolo principale */
+    text-align: center; /* Centra il titolo principale */
+}
+
+#documentazione-sezione h3 {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-size: 20px;
+    color: #007bff; /* Colore accattivante per i sottotitoli */
+}
+
+#documentazione-sezione p {
+    margin-bottom: 20px;
+    line-height: 1.6; /* Aumenta lo spazio tra le righe per migliorare la leggibilità */
+    font-size: 16px;
+    color: #555; /* Testo grigio scuro */
+}
+
+/* Aggiungi un po' di spaziatura intorno alla sezione documentazione */
+.sezione {
+    margin-bottom: 30px;
+}
+
+#preview-image-modal {
+    margin-top: 10px;
+    max-width: 100px;
+    height: auto;
+    display: none; /* L'immagine è nascosta finché non viene selezionata una foto */
+}
+
+/* Immagini direttamente accanto alla task */
+.task img {
+    margin-left: 10px;
+    max-width: 50px;
+    height: auto;
+    vertical-align: middle;
+}
+
+/* Il pulsante per chiudere il modal (X) */
+#chiudi-immagine {
+    position: absolute;
+    top: 20px;
+    right: 35px;
+    color: #fff;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#chiudi-immagine:hover, #chiudi-immagine:focus {
+    color: #bbb;
+    text-decoration: none;
+    cursor: pointer;
+}

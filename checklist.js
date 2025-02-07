@@ -1032,9 +1032,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const form = pdfDoc.getForm();
     
         // Recupera i dati dai campi dell'app
-        const managerName = document.getElementById('manager-name').value || "N/D";
-        const shiftDate = document.getElementById('data-turno').value || "N/D";
-        const shiftPart = document.getElementById('shift-part').value || "N/D";
+        const managerName = document.getElementById('manager-name').value || "";
+        const shiftDate = document.getElementById('data-turno').value || "";
+        const shiftPart = document.getElementById('shift-part').value || "";
 
         // Trova i campi del PDF (usa il nome corretto dei campi nel template PDF)
         form.getTextField('manager').setText(managerName);
@@ -1051,7 +1051,7 @@ document.addEventListener('DOMContentLoaded', function() {
         timeMapping.forEach(({ htmlId, pdfField }) => {
             const timeInput = document.getElementById(htmlId);
             if (timeInput) {
-                form.getTextField(pdfField).setText(timeInput.value || "N/A");
+                form.getTextField(pdfField).setText(timeInput.value || "");
             }
         });
 
@@ -1059,7 +1059,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const maxRows = 9;
 
         tableRows.forEach((row, index) => {
-            if (index < maxRows) { // Se abbiamo più righe del previsto, prendiamo solo le prime 10
+            if (index < maxRows) { 
                 const cells = row.querySelectorAll('td');
     
                 // Controlla se la cella contiene un input o una textarea e recupera il valore
@@ -1095,13 +1095,13 @@ document.addEventListener('DOMContentLoaded', function() {
     
             // Se il campo esiste nel PDF, lo riempiamo con le task
             if (form.getTextField(pdfField)) {
-                form.getTextField(pdfField).setText(taskText || "Nessuna Task Presente");
+                form.getTextField(pdfField).setText(taskText || "");
             }
         });
 
         postTurnoFields.forEach(({ htmlId, pdfField }) => {
             const commentBox = document.getElementById(htmlId);
-            const commentText = commentBox ? commentBox.value.trim() : "Nessun commento";
+            const commentText = commentBox ? commentBox.value.trim() : "";
     
             // Se il campo esiste nel PDF, lo riempiamo con il testo
             if (form.getTextField(pdfField)) {
@@ -1121,18 +1121,6 @@ document.addEventListener('DOMContentLoaded', function() {
         a.href = url;
         a.download = `Checklist_Turno_${shiftDate}.pdf`;
         a.click();
-    });
-    
-    document.getElementById('generate-pdf').addEventListener('click', async function () {
-        
-            const tasks = document.querySelectorAll('.task-item');
-            console.log("Elenco delle Task:");
-        
-            tasks.forEach((task, index) => {
-                const testo = task.querySelector('.task-text') ? task.querySelector('.task-text').innerText : "N/A";
-                console.log(`${index + 1}. Task: ${testo}`);
-            });
-        
     });
 
 });

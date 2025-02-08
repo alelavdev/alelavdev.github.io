@@ -3,6 +3,8 @@ let userPrivilege = null;
 let userLocale = null;
 let uuid = null;
 
+console.log("📦 Contenuto di localStorage:", localStorage.getItem("user"));
+
 function goToPage(page) {
   window.location.href = page;
 }
@@ -585,10 +587,10 @@ async function login() {
     const user = users[0];
     const { id, role, locale, username } = user;
 
-    localStorage.setItem("user", JSON.stringify({ id, role, locale, username }));
+    userLocale = locale.trim().toLowerCase();
+    localStorage.setItem("user", JSON.stringify({ id, role, locale: userLocale, username }));
 
     userPrivilege = role;
-    userLocale = locale;
     uuid = id;
 
     mostraDatiAccount();
@@ -624,18 +626,18 @@ function mostraDatiAccount() {
   }
 }
 
-// Mostra i dati subito dopo il caricamento della pagina
 document.addEventListener("DOMContentLoaded", () => {
   mostraDatiAccount();
 });
 
-
 document.addEventListener("DOMContentLoaded", () => {
   const savedUser = JSON.parse(localStorage.getItem("user"));
 
-  if (savedUser) {
+  if (savedUser && savedUser.locale) {
     userPrivilege = savedUser.role;
-    userLocale = savedUser.locale;
+    userLocale = savedUser.locale.trim().toLowerCase();
+
+    console.log("Locale caricato dal localStorage:", userLocale);
 
     document.getElementById("login-screen").style.display = "none";
     document.getElementById("app-content").style.display = "block";
@@ -644,11 +646,17 @@ document.addEventListener("DOMContentLoaded", () => {
     usersCredits();
     caricaDatiUtente();
   } else {
+    console.warn("⚠️ Nessun userLocale trovato nel localStorage!");
     document.getElementById("login-screen").style.display = "block";
   }
+  setTimeout(() => {
+    console.log("🟢 userLocale dopo delay:", userLocale);
+    caricaDatiUtente();
+  }, 500);
 });
 
 function caricaDatiUtente() {
+  caricaFormazioni()
   caricaAnnunci()
   caricaLocali()
   caricaListaLocali()
@@ -736,10 +744,12 @@ async function caricaMalattie() {
     return;
   }
 
+  const filteredMalattie = malattie.filter(f => canViewLocale(f.locale));
+
   const malattieList = document.getElementById("malattieList");
   malattieList.innerHTML = "";
 
-  malattie.forEach(malattia => {
+  filteredMalattie.forEach(malattia => {
     const malattiaItem = document.createElement("div");
     malattiaItem.classList.add("malattia-item");
 
@@ -801,19 +811,29 @@ async function eliminaMalattia(malattiaId) {
 }
 
 async function caricaFormazioni() {
+  console.log("🟡 userLocale attuale:", userLocale); 
+
   const { data: formazioni, error } = await supabase
     .from('formazioni')
     .select('*')
-    .eq('locale', userLocale)
+    .eq('locale', userLocale.trim().toLowerCase())  
     .order('date', { ascending: true });
 
   if (error) {
-    console.error("Errore nel caricamento delle formazioni:", error);
+    console.error("❌ Errore nel caricamento delle formazioni:", error);
     return;
   }
 
+  console.log("🔍 Formazioni caricate da Supabase:", formazioni); 
+
   const formazioneList = document.getElementById("formazioneList");
   formazioneList.innerHTML = "";
+
+  if (!formazioni || formazioni.length === 0) {
+    console.warn("⚠️ Nessuna formazione trovata per il locale:", userLocale);
+    formazioneList.innerHTML = "<p>Nessuna formazione disponibile.</p>";
+    return;
+  }
 
   formazioni.forEach(formazione => {
     const formazioneItem = document.createElement("div");
@@ -836,6 +856,16 @@ async function caricaFormazioni() {
 
     formazioneList.appendChild(formazioneItem);
   });
+}
+
+
+function canViewLocale(localeRequired) {
+  if (!userLocale) {
+      console.warn("⚠️ userLocale non è definito!");
+      return false;
+  }
+
+  return localeRequired === userLocale; 
 }
 
 async function aggiungiFormazioni() {
@@ -1168,9 +1198,15 @@ async function caricaLocali() {
   caricaDati(); 
 }
 
+
 function cambiaLocale(nuovoLocale) {
-  userLocale = nuovoLocale;
+  userLocale = nuovoLocale.trim().toLowerCase();
   console.log("Locale selezionato:", userLocale);
+  localStorage.setItem("user", JSON.stringify({ 
+    ...JSON.parse(localStorage.getItem("user")), 
+    locale: userLocale 
+  }));
+  console.log("🔄 Locale cambiato in:", userLocale);
   
   caricaDati();
 }
@@ -1738,6 +1774,11 @@ async function salvaNews() {
   }
 
   showNotification("News salvata con successo!", "success");
+  title.value = "";
+  date.value = "";
+  description.value = "";
+  roleRequired.value = "";
+  fileInput.value = "";
   salvaImmaginiCarosello(file, title, date); 
   caricaNews();
 }

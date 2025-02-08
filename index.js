@@ -3,7 +3,6 @@ let userPrivilege = null;
 let userLocale = null;
 let uuid = null;
 
-console.log("📦 Contenuto di localStorage:", localStorage.getItem("user"));
 
 function goToPage(page) {
   window.location.href = page;
@@ -657,6 +656,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function caricaDatiUtente() {
   caricaFormazioni()
+  caricaTaskManutenzione()
   caricaAnnunci()
   caricaLocali()
   caricaListaLocali()
@@ -1216,6 +1216,7 @@ function caricaDati() {
   caricaFeste();
   caricaMalattie();
   caricaFormazioni();
+  caricaTaskManutenzione();
   aggiornaListaRichieste();
   caricaImmaginiOrario();
   caricaOrdini();
@@ -2029,5 +2030,171 @@ async function eliminaNews(title) {
       }
     }
   );
+}
+
+async function aggiungiTaskManutenzione() {
+  const titoloInput = document.getElementById("taskTitolo");
+  const descrizioneInput = document.getElementById("taskDescrizione");
+  const immaginiInput = document.getElementById("taskImmagini");
+
+  if (!titoloInput.value.trim()) {
+      alert("⚠️ Inserisci un titolo per la task!");
+      return;
+  }
+
+  const immaginiBase64 = [];
+  for (const file of immaginiInput.files) {
+      const base64String = await getResizedBase64(file, 800);
+      immaginiBase64.push(base64String);
+  }
+
+  console.log("✅ Immagini ridimensionate e convertite in Base64:", immaginiBase64);
+
+  const { data, error } = await supabase
+      .from('manutenzione_task')
+      .insert([{ 
+          locale: userLocale, 
+          titolo: titoloInput.value, 
+          descrizione: descrizioneInput.value, 
+          stato: "aperta",
+          foto: immaginiBase64
+      }]);
+
+  if (error) {
+      console.error("❌ Errore nell'inserimento della task:", error);
+      return;
+  }
+
+  console.log("✅ Task aggiunta con successo:", data);
+
+  titoloInput.value = "";
+  descrizioneInput.value = "";
+  immaginiInput.value = ""; 
+
+  caricaTaskManutenzione();
+}
+
+
+async function caricaTaskManutenzione() {
+  console.log("🟡 Caricamento task di manutenzione per locale:", userLocale);
+
+  const { data: tasks, error } = await supabase
+      .from('manutenzione_task')
+      .select('*')
+      .eq('locale', userLocale)
+      .order('data_creazione', { ascending: false });
+
+  if (error) {
+      console.error("❌ Errore nel caricamento delle task:", error);
+      return;
+  }
+
+  console.log("🔍 Task caricate:", tasks);
+
+  const taskList = document.getElementById("taskList");
+  taskList.innerHTML = "";
+
+  tasks.forEach(task => {
+      const taskItem = document.createElement("div");
+      taskItem.classList.add("task-item");
+
+      const taskTitle = document.createElement("h3");
+      taskTitle.innerText = `${task.titolo} (${task.stato})`;
+
+      const taskDesc = document.createElement("p");
+      taskDesc.innerText = task.descrizione;
+
+      const imgContainer = document.createElement("div");
+      imgContainer.classList.add("task-images");
+      task.foto.forEach(base64Img => {
+          const img = document.createElement("img");
+          img.src = base64Img;
+          img.classList.add("task-img");
+          imgContainer.appendChild(img);
+      });
+
+      const completeBtn = document.createElement("button");
+      completeBtn.innerText = "Completa";
+      completeBtn.onclick = () => completaTask(task.id);
+
+      const deleteBtn = document.createElement("button");
+      deleteBtn.innerText = "Elimina";
+      deleteBtn.onclick = () => eliminaTask(task.id);
+
+      taskItem.appendChild(taskTitle);
+      taskItem.appendChild(taskDesc);
+      taskItem.appendChild(imgContainer);
+      taskItem.appendChild(completeBtn);
+      taskItem.appendChild(deleteBtn);
+
+      taskList.appendChild(taskItem);
+  });
+}
+
+async function completaTask(taskId) {
+  const { error } = await supabase
+      .from('manutenzione_task')
+      .update({ stato: "completata" })
+      .eq('id', taskId);
+
+  if (error) {
+      console.error("❌ Errore nel completamento della task:", error);
+      return;
+  }
+
+  console.log("✅ Task completata con successo!");
+  caricaTaskManutenzione();
+}
+
+async function eliminaTask(taskId) {
+  const { error } = await supabase
+      .from('manutenzione_task')
+      .delete()
+      .eq('id', taskId);
+
+  if (error) {
+      console.error("❌ Errore nell'eliminazione della task:", error);
+      return;
+  }
+
+  console.log("✅ Task eliminata con successo!");
+  caricaTaskManutenzione();
+}
+
+async function getResizedBase64(file, maxWidth = 800) {
+  return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+
+      reader.onload = function (event) {
+          const img = new Image();
+          img.src = event.target.result;
+
+          img.onload = function () {
+              const canvas = document.createElement("canvas");
+              const ctx = canvas.getContext("2d");
+
+              let width = img.width;
+              let height = img.height;
+
+              if (width > maxWidth) {
+                  height = (maxWidth / width) * height;
+                  width = maxWidth;
+              }
+
+              canvas.width = width;
+              canvas.height = height;
+
+              ctx.drawImage(img, 0, 0, width, height);
+
+              const resizedBase64 = canvas.toDataURL("image/jpeg", 0.8);
+              resolve(resizedBase64);
+          };
+
+          img.onerror = reject;
+      };
+
+      reader.onerror = reject;
+  });
 }
 

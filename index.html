@@ -52,6 +52,7 @@
       <li><a href="#" onclick="showMainSections(); showSection('home')">Home</a></li>
       <li><a href="#" onclick="showMainSections(); showSection('news')">News</a></li>
       <div class="section admin-section" style="display: none;">
+        <li><a href="#" onclick="showMainSections(); showSection('manutenzione')">Manutenzione</a></li>
         <li><a href="#" onclick="toggleSubMenu('ufficio-submenu')">Ufficio</a>
           <ul id="ufficio-submenu" class="submenu">
             <li><a href="#" onclick="showSection2('trasferimenti')">Trasferimenti</a></li>
@@ -60,9 +61,9 @@
             <li><a href="#" onclick="showSection2('formazione')">Formazioni</a></li>
             <li><a href="#" onclick="showSection2('annunci-importanti')">Postit</a></li>
             <li><a href="#" onclick="showSection2('tutorial')">Tutorial</a></li>
+            <li><a href="#" onclick="goToPage('checklist.html')">Check List Shift</button>
             <li><a href="#" onclick="showSection2('contacts-section')">Contatti Aurea</a></li>
             <li><a href="#" onclick="showSection2('numeri')">Numeri Utili</a></li>
-            <li><a href="#" onclick="goToPage('checklist.html')">Check List Shift</button>
             <li><a href="https://alelav90.github.io/">Sezione moduli</a></li>
           </ul>
         </li>
@@ -189,6 +190,18 @@
         <ul id="postitList"></ul>
         <button onclick="caricaPostit()">Aggiorna Lista</button>
       </div>
+    </section>
+    <!-- Manutenzione -->
+    <section id="manutenzione" class="section" style="display: none;">
+      <h2>Task di Manutenzione</h2>
+
+      <input type="text" id="taskTitolo" placeholder="Titolo Task">
+      <textarea id="taskDescrizione" placeholder="Descrizione Task"></textarea>
+      <input type="file" id="taskImmagini" multiple>
+      <button onclick="aggiungiTaskManutenzione()">Aggiungi Task</button>
+
+      <h3>Elenco Task</h3>
+      <div id="taskList"></div>
     </section>
     <!-- Fast News -->
       <section id="fastnews" class="section" style="display: none;">

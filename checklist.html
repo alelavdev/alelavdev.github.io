@@ -12,14 +12,14 @@
     <script src="https://unpkg.com/pdf-lib"></script>
 <body>
     <div class="container">
-        <div class="header">
+        <div class="header"><li>
             <h1>Checklist Shift Digitale</h1>
-            <!--li><a href="#" onclick="goToPage('index.html')">Torna ad hub</button-->
                  <!-- Tasto per Dark Mode -->
                 <label class="switch">
                     <input type="checkbox" id="theme-toggle">
                     <span class="slider round"></span>
                 </label >
+                
                 
             <!-- Menu a tendina accanto al titolo -->
             <div class="menu-accesso">
@@ -33,6 +33,7 @@
                     <a href="#" id="task-page">Gestione Task</a>
                     <a href="#" id="post-turno-page">Post turno</a>
                     <a href="#" id="documentazione-page">Documentazione</a>
+                    <a href="#" onclick="goToPage('index.html')">Torna ad hub</a>
                 </div>
             </div>
         </div>
@@ -194,6 +195,14 @@
 ** L'esperienza positiva genera vendite! Gestisci dal posto di osservazione e intervieni nelle zone di pericolo.
 *** E' fondamentale che le VLH siano correttamente aggiornate, verifica sempre la pianificazione il giorno prima e controlla il corretto posizionamento delle persone in base ai picchi previsti e alle condizioni del tuo ristorante."></textarea>
         </div>
+
+        <div id="customConfirm" class="modal">
+            <div class="modal-content">
+                <p>Sei sicuro di voler cancellare tutti i dati?</p>
+                <button id="confirmYes">Sì</button>
+                <button id="confirmNo">No</button>
+            </div>
+        </div>        
 
         <!-- Sezione Aree di Produzione con pulsanti -->
         <div id="aree-produzione-sezione" class="sezione nascosta">

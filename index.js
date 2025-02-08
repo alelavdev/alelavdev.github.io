@@ -570,7 +570,7 @@ async function login() {
   const { data: users, error } = await supabase
     .from('users')
     .select('id, role, locale, username')
-    .eq('username', usernameInput)
+    .ilike('username', usernameInput)
     .eq('password', password);
   if (error) {
     console.error("Errore nel login:", error);

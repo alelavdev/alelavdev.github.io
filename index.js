@@ -1156,11 +1156,16 @@ async function caricaLocali() {
     localeSelect.appendChild(option);
   });
 
-  if (userLocales.length > 0) {
+  if (!userLocale && userLocales.length > 0) {
     userLocale = userLocales[0].locale;
-    localeSelect.value = userLocale;
-    caricaDati(); 
+    console.log("✅ Impostato userLocale con il primo valore disponibile:", userLocale);
+  } else {
+    console.log("🔹 Mantengo userLocale:", userLocale);
   }
+
+  localeSelect.value = userLocale;
+
+  caricaDati(); 
 }
 
 function cambiaLocale(nuovoLocale) {

@@ -1417,3 +1417,149 @@ input[type="password"]:focus {
   border: 1px solid #ccc;
 }
 
+#pdfViewer {
+  display: block;
+  max-width: 100%;  
+  height: auto;  
+  margin: 0 auto;  
+  border: 1px solid #ddd;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.pdf-controls {
+  position: fixed;
+  bottom: 15px;
+  right: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pdf-button {
+  background: rgba(0, 0, 0, 0.3);
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  font-size: 14px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s;
+  opacity: 0.5; 
+}
+
+.pdf-button:hover {
+  background: rgba(0, 0, 0, 0.7);
+  opacity: 1;
+}
+
+.pdf-nav {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.8);
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: 0.3s;
+  opacity: 0.3;
+}
+
+.pdf-nav:hover {
+  background: rgba(0, 0, 0, 0.6);
+  opacity: 1;
+}
+
+#prevPage {
+  left: 10px;
+}
+
+#nextPage {
+  right: 10px;
+}
+
+.pdf-search-btn {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.3);
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  font-size: 14px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s;
+  opacity: 0.5; 
+}
+
+.pdf-search-btn:hover {
+  background: rgba(0, 0, 0, 0.7);
+  opacity: 1;
+}
+
+.pdf-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px auto;
+}
+
+#searchPrev {
+  top: -40px; 
+}
+
+#searchNext {
+  bottom: -40px; 
+}
+
+.pdf-library {
+  background: #222; 
+  color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  width: 350px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+  margin: auto;
+  text-align: center;
+}
+
+.pdf-library h2 {
+  font-size: 22px;
+  margin-bottom: 15px;
+}
+
+.pdf-list {
+  list-style: none;
+  padding: 0;
+  text-align: left;
+}
+
+.pdf-list li {
+  padding: 10px;
+  border-bottom: 1px solid #444;
+}
+
+.pdf-list a {
+  text-decoration: none;
+  color: #f8f9fa;
+  font-weight: bold;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pdf-list a:hover {
+  color: #ff6b6b;
+  transition: 0.3s;
+}
+
+.pdf-list i {
+  color: #ff6b6b;
+  font-size: 18px;
+}

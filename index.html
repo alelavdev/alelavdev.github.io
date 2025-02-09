@@ -5,8 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hub Aurea</title>
   <link rel="stylesheet" href="index.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
   <div id="login-screen">
@@ -86,7 +87,7 @@
           </ul>
         </li>
       </div>
-      <li><a href="#" onclick="goToPage('allergeni.html')">Allergeni</button>
+      <li><a href="#" onclick="showMainSections(); showSection('pdfreader')">Libreria</a></li>
       <li><a href="#" onclick="toggleSubMenu('account-submenu')">Account</a>
         <ul id="account-submenu" class="submenu">
           <li id="account-username">Utente: </li>
@@ -100,6 +101,16 @@
       </div>
     </ul>
   </nav>
+  <!-- PDF Reader-->
+  <section id="pdfreader" class="section" style="display: none;">
+    <div class="pdf-library">
+      <h2>📚 Libreria</h2>
+      <ul id="pdfreader-submenu" class="pdf-list">
+          <li><a href="#" onclick="window.open('documenti/Database - Allergeni.pdf')"><i class="fa-solid fa-file-pdf"></i> Allergeni</a></li>
+          <li><a href="#" onclick="window.open('documenti/Cartello Ingredienti.pdf')"><i class="fa-solid fa-file-pdf"></i> Cartello Ingredienti</a></li>
+      </ul>
+    </div>
+  </section>
   <!-- Creazione account-->
   <section id="createAccountSection" class="section2" style="display: none;">
     <h2>Crea Nuovo Account</h2>

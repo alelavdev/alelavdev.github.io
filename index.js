@@ -2198,3 +2198,9 @@ async function getResizedBase64(file, maxWidth = 800) {
   });
 }
 
+
+
+
+
+
+

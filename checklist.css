@@ -107,7 +107,6 @@ h3 {
     display: block;
 }
 
-/* Aggiungiamo uno stile per visualizzare gli elementi delle sezioni in colonna */
 .sezione form {
     display: flex;
     flex-direction: column;

@@ -5,9 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hub Aurea</title>
   <link rel="stylesheet" href="index.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/handsontable@12.1.1/dist/handsontable.full.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/handsontable@12.1.1/dist/handsontable.full.min.js"></script>
 </head>
 <body>
   <div id="login-screen">
@@ -28,7 +30,7 @@
     <div class="app-title" onclick="showMainSections(); showSection('home')">
       <img src="https://nxdgrrympafaeomfgcnh.supabase.co/storage/v1/object/public/hub-immagini/Hub_Aurea_Logo_Transparent.png?t=2024-11-02T13%3A21%3A58.753Z" alt="Hub Aurea Logo" class="logo">
     </div>
-    <div class="section master-section" style="display: none;">
+    <div class="section master-section" id ="cambioLocale" style="display: none;">
       <div class="locale-selector">
         <select id="localeSelect" onchange="cambiaLocale(this.value)">
         </select>
@@ -56,6 +58,7 @@
         <li><a href="#" onclick="showMainSections(); showSection('manutenzione')">Manutenzione</a></li>
         <li><a href="#" onclick="toggleSubMenu('ufficio-submenu')">Ufficio</a>
           <ul id="ufficio-submenu" class="submenu">
+            <li><a href="#" onclick="showSection2('lineari')">Lineari</a></li>
             <li><a href="#" onclick="showSection2('trasferimenti')">Trasferimenti</a></li>
             <li><a href="#" onclick="showSection2('ordini')">Prodotti esauriti</a></li>
             <li><a href="#" onclick="showSection2('malattie')">Malattie</a></li>
@@ -205,12 +208,12 @@
     <!-- Manutenzione -->
     <section id="manutenzione" class="section" style="display: none;">
       <h2>Task di Manutenzione</h2>
-
-      <input type="text" id="taskTitolo" placeholder="Titolo Task">
-      <textarea id="taskDescrizione" placeholder="Descrizione Task"></textarea>
-      <input type="file" id="taskImmagini" multiple>
-      <button onclick="aggiungiTaskManutenzione()">Aggiungi Task</button>
-
+      <div class="section admin-section" style="display: none;">
+        <input type="text" id="taskTitolo" placeholder="Titolo Task">
+        <textarea id="taskDescrizione" placeholder="Descrizione Task"></textarea>
+        <input type="file" id="taskImmagini" multiple>
+        <button onclick="aggiungiTaskManutenzione()">Aggiungi Task</button>
+      </div>
       <h3>Elenco Task</h3>
       <div id="taskList"></div>
     </section>
@@ -283,7 +286,34 @@
         <div id="listaTrasferimentiContainer"></div>
       </div>
     </section>
-    
+    <!-- Lineari -->
+    <section id="lineari" class="section2" style="display: none;">
+      <h2>Gestione Lineari Aziendali</h2>
+      <label for="day-selector">Seleziona il giorno:</label>
+      <select id="day-selector">
+          <option value="Lunedì">Lunedì</option>
+          <option value="Martedì">Martedì</option>
+          <option value="Mercoledì">Mercoledì</option>
+          <option value="Giovedì">Giovedì</option>
+          <option value="Venerdì">Venerdì</option>
+          <option value="Sabato">Sabato</option>
+          <option value="Domenica">Domenica</option>
+      </select>
+      <h3>Mattina</h3>
+      <div id="lineari-table-mattina"></div>
+      <h3>Pranzo</h3>
+      <div id="lineari-table-pranzo"></div>
+      <h3>Pomeriggio</h3>
+      <div id="lineari-table-pomeriggio"></div>
+      <h3>Cena</h3>
+      <div id="lineari-table-cena"></div>
+      <h3>Notte</h3>
+      <div id="lineari-table-notte"></div>
+
+      <button id="save-button">Salva</button>
+      <button id="delete-button">Cancella Pagina</button>
+
+    </section>
     <!-- Orari -->
     <div class="section admin-section" style="display: none;">
       <section id="orari-manager" class="section2" style="display: none;">

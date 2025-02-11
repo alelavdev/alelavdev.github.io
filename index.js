@@ -729,7 +729,20 @@ function usersCredits() {
     document.querySelectorAll(".hospitality-section, .admin-section").forEach(section => {
       section.style.display = "none";
     });
-  }
+  } else if (userPrivilege === "manutenzione") {
+    document.querySelectorAll('.section').forEach(section => {
+      section.style.display = "none";
+    });
+    document.getElementById('cambioLocale').style.display = "block";
+    document.getElementById('manutenzione').style.display = "block";
+    document.getElementById("sidebar").style.display = "none";
+    document.getElementById("menu-overlay").style.display = "none";
+    
+    const menuIcon = document.querySelector(".menu-icon");
+    if (menuIcon) {
+        menuIcon.style.display = "none"; 
+    }
+  } 
 }
 
 async function caricaMalattie() {
@@ -2117,15 +2130,17 @@ async function caricaTaskManutenzione() {
       completeBtn.innerText = "Completa";
       completeBtn.onclick = () => completaTask(task.id);
 
-      const deleteBtn = document.createElement("button");
-      deleteBtn.innerText = "Elimina";
-      deleteBtn.onclick = () => eliminaTask(task.id);
+      if (userPrivilege !== "manutenzione") {
+        const deleteBtn = document.createElement("button");
+        deleteBtn.innerText = "Elimina";
+        deleteBtn.onclick = () => eliminaTask(task.id);
+        taskItem.appendChild(deleteBtn);
+      }
 
       taskItem.appendChild(taskTitle);
       taskItem.appendChild(taskDesc);
       taskItem.appendChild(imgContainer);
       taskItem.appendChild(completeBtn);
-      taskItem.appendChild(deleteBtn);
 
       taskList.appendChild(taskItem);
   });
@@ -2197,6 +2212,158 @@ async function getResizedBase64(file, maxWidth = 800) {
       reader.onerror = reject;
   });
 }
+
+// Elementi del DOM
+const container = document.getElementById('lineari-table');
+const daySelector = document.getElementById('day-selector');
+const saveButton = document.getElementById('save-button');
+
+// Funzione per caricare i dati di un giorno specifico
+async function loadDayData(day) {
+    let { data, error } = await supabase.from('lineari').select('*').eq('giorno', day);
+    if (error) {
+        console.error('Errore nel caricamento:', error);
+        return;
+    }
+    
+    if (!data || data.length === 0) {
+        data = Array.from({ length: 10 }, () => ({ nome: '', orario_inizio: '', orario_fine: '', reparto: '', note: '' }));
+    }
+
+    hot.loadData(data);
+}
+
+// Inizializza Handsontable per ciascuna fascia oraria
+document.addEventListener('DOMContentLoaded', async () => {
+  const fasce = ['mattina', 'pranzo', 'pomeriggio', 'cena', 'notte'];
+  const containers = {};
+  const tables = {};
+
+  for (const fascia of fasce) {
+      containers[fascia] = document.getElementById(`lineari-table-${fascia}`);
+      tables[fascia] = new Handsontable(containers[fascia], {
+          data: [],
+          colHeaders: ['Nome', 'Orario Inizio', 'Orario Fine', 'Reparto', 'Note'],
+          columns: [
+              { data: 'nome', type: 'text' },
+              { data: 'orario_inizio', type: 'time', timeFormat: 'HH:mm' },
+              { data: 'orario_fine', type: 'time', timeFormat: 'HH:mm' },
+              { data: 'reparto', type: 'text' },
+              { data: 'note', type: 'text' }
+          ],
+          rowHeaders: true,
+          filters: true,
+          dropdownMenu: true,
+          contextMenu: true,
+          minSpareRows: 1,
+          stretchH: 'all',
+          height: 'auto',
+          width: '100%', 
+          licenseKey: 'non-commercial-and-evaluation',
+      });
+  }
+
+  // Funzione per caricare i dati di un giorno specifico
+  async function loadDayData(giornoSelezionato) {
+      for (const fascia of fasce) {
+          let { data, error } = await supabase.from('lineari').select('*').eq('giorno', giornoSelezionato).eq('fascia', fascia);
+          if (error) {
+              console.error(`Errore nel caricamento per ${fascia}:`, error);
+              continue;
+          }
+          tables[fascia].loadData(data || []);
+      }
+  }
+
+  // Carica i dati quando cambia il giorno selezionato
+  document.getElementById('day-selector').addEventListener('change', async (event) => {
+      const giornoSelezionato = event.target.value;
+      await loadDayData(giornoSelezionato);
+  });
+
+  // Pulsante Salva su Supabase
+  document.getElementById('save-button').addEventListener('click', async () => {
+      const giornoSelezionato = document.getElementById('day-selector').value;
+      if (!giornoSelezionato) {
+          alert("Seleziona un giorno prima di salvare!");
+          return;
+      }
+
+      for (const fascia of fasce) {
+          const newData = tables[fascia].getSourceData()
+              .filter(row => row.nome) // Evita di salvare righe vuote
+              .map(row => ({ ...row, giorno: giornoSelezionato, fascia }));
+
+          if (newData.length === 0) continue; // Se non ci sono dati validi, passa alla fascia successiva
+
+          // Cancella solo i dati della fascia e giorno selezionato
+          await supabase.from('lineari').delete().eq('giorno', giornoSelezionato).eq('fascia', fascia);
+          const { error } = await supabase.from('lineari').insert(newData);
+
+          if (error) {
+              console.error(`Errore nel salvataggio per ${fascia}:`, error);
+              alert(`Errore nel salvataggio per ${fascia}: ${error.message}`);
+          }
+      }
+
+      alert("Dati salvati con successo!");
+  });
+
+  // Caricare i dati del giorno iniziale
+  const giornoIniziale = document.getElementById('day-selector').value;
+  await loadDayData(giornoIniziale);
+});
+
+// Carica i dati quando cambia il giorno selezionato
+daySelector.addEventListener('change', (event) => {
+    loadDayData(event.target.value);
+});
+
+// Salvataggio su Supabase
+saveButton.addEventListener('click', async () => {
+  let newData = hot.getSourceData()
+      .filter(row => row.nome && row.orario_inizio && row.orario_fine && row.reparto); // Filtra righe incomplete
+
+  if (newData.length === 0) {
+      alert("Nessun dato valido da salvare. Controlla che tutte le righe siano compilate!");
+      return;
+  }
+
+  // Aggiunge il giorno alla riga prima di salvare
+  newData = newData.map(row => ({ ...row, giorno: daySelector.value }));
+
+  // Cancella e aggiorna i dati in Supabase
+  await supabase.from('lineari').delete().eq('giorno', daySelector.value);
+  const { error } = await supabase.from('lineari').insert(newData);
+
+  if (error) {
+      console.error('Errore nel salvataggio:', error);
+      alert("Errore nel salvataggio: " + error.message);
+  } else {
+      alert("Dati salvati con successo!");
+  }
+});
+
+// Pulsante per cancellare tutti i dati del giorno selezionato
+document.getElementById('delete-button').addEventListener('click', async () => {
+  const giornoSelezionato = document.getElementById('day-selector').value;
+  if (!giornoSelezionato) {
+      alert("Seleziona un giorno prima di cancellare!");
+      return;
+  }
+
+  const confirmDelete = confirm(`Sei sicuro di voler cancellare tutti i dati di ${giornoSelezionato}?`);
+  if (!confirmDelete) return;
+
+  await supabase.from('lineari').delete().eq('giorno', giornoSelezionato);
+  alert(`Tutti i dati di ${giornoSelezionato} sono stati cancellati.`);
+  await loadDayData(giornoSelezionato);
+});
+
+// Carica i dati del primo giorno all'avvio
+document.addEventListener('DOMContentLoaded', () => {
+    loadDayData(daySelector.value);
+});
 
 
 

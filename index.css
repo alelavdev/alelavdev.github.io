@@ -1577,3 +1577,22 @@ input[type="password"]:focus {
   padding: 5px;
   font-size: 16px;
 }
+
+#logout-button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px; 
+}
+
+#logout-button i {
+  font-size: 20px;
+}
+
+#logout-button:hover {
+  color: red;
+}

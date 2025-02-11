@@ -735,7 +735,7 @@ function usersCredits() {
     });
     document.getElementById('cambioLocale').style.display = "block";
     document.getElementById('manutenzione').style.display = "block";
-    document.getElementById("sidebar").style.display = "none";
+    document.getElementById("sidebar").style.display = "block";
     document.getElementById("menu-overlay").style.display = "none";
     
     const menuIcon = document.querySelector(".menu-icon");

@@ -1584,7 +1584,7 @@ input[type="password"]:focus {
   color: white;
   font-size: 16px;
   cursor: pointer;
-  display: flex;
+  display: none;
   align-items: center;
   gap: 8px; 
 }

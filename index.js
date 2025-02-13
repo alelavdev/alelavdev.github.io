@@ -107,6 +107,7 @@ function showSection(sectionId) {
   });
   usersCredits();
   closeMenu();
+  gestisciVisibilitaLogout();
 }
 
 function showSection2(sectionId) {
@@ -144,6 +145,7 @@ function showSection2(sectionId) {
   }
   usersCredits();
   closeMenu();
+  gestisciVisibilitaLogout();
 }
 
 function showMainSections() {
@@ -742,8 +744,24 @@ function usersCredits() {
     if (menuIcon) {
         menuIcon.style.display = "none"; 
     }
+    gestisciVisibilitaLogout();
   } 
 }
+
+function gestisciVisibilitaLogout() {
+  const user = JSON.parse(localStorage.getItem("user"));
+  if (!user) return;
+
+  const userRole = userPrivilege;
+  const logoutButton = document.getElementById("logout-button");
+
+  if (userRole === "manutenzione" && document.getElementById("manutenzione").style.display === "block") {
+      logoutButton.style.display = "block";
+  } else {
+      logoutButton.style.display = "none";
+  }
+}
+
 
 async function caricaMalattie() {
   const { data: malattie, error } = await supabase

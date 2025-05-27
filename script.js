@@ -1,3 +1,9 @@
+window.addEventListener("pageshow", (event) => {
+  if (event.persisted) {
+    document.getElementById("container")?.classList.remove("fade-out");
+  }
+});
+
 const entraBtn = document.getElementById("entraBtn");
 if (entraBtn) {
   entraBtn.addEventListener("click", () => {

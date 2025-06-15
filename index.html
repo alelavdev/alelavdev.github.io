@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scuola di Musica</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <header>
+    <img src="logo.png" alt="Logo Scuola di Musica">
+    <div class="menu-container">
+      <button class="menu-toggle" onclick="toggleMenu()">☰ Menu</button>
+    </div>
+    <div id="menu" class="dropdown-menu">
+      <a href="index.html">Home</a>
+      <a href="#chi-siamo">Chi Siamo</a>
+      <a href="#corsi">Corsi</a>
+      <a href="#contatti">Contatti</a>
+
+    </div>
+  </header>
+
+  <div class="entrance-container">
+    <div class="enter-box">Clicca qui per entrare nella scuola <span class="arrow">⬇️</span></div>
+    <br>
+    <img src="img/ingresso.png" alt="Ingresso Scuola" class="entrance-image" onclick="goTo('html/home.html')">
+  </div>
+
+  <div class="hero">
+    <video id="video-background" autoplay muted loop playsinline>
+      <source src="video/canto.mp4" type="video/mp4">
+    </video>
+    <div class="hero-text">
+      Benvenuti nella Scuola di Musica
+    </div>
+  </div>
+
+  <main>
+    <section id="chi-siamo">
+      <h2>Chi Siamo</h2>
+      <p>La Scuola di Musica Armonia promuove la cultura musicale con corsi per tutte le età, un ambiente inclusivo e insegnanti altamente qualificati.</p>
+    </section>
+
+    <section id="corsi">
+      <h2>I Nostri Corsi</h2>
+      <div class="columns">
+        <div class="column">
+          <h3>Pianoforte</h3>
+          <p>Per principianti ed esperti. Lezioni individuali e collettive.</p>
+        </div>
+        <div class="column">
+          <h3>Chitarra</h3>
+          <p>Classica, acustica ed elettrica. Tecniche moderne e tradizionali.</p>
+        </div>
+        <div class="column">
+          <h3>Canto</h3>
+          <p>Impara a usare la tua voce in modo professionale con i nostri vocal coach.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="contatti">
+      <h2>Contatti</h2>
+      <div class="columns">
+        <div class="column">
+          <h4>Indirizzo</h4>
+          <p>Via della Musica, 1<br>00000 Città</p>
+        </div>
+        <div class="column">
+          <h4>Email e Telefono</h4>
+          <p>Email: info@scuoladimusica.it<br>Tel: 0123 456789</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Scuola di Musica Armonia • Tutti i diritti riservati</p>
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html>

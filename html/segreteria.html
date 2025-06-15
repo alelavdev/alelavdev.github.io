@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Segreteria</title>
+  <link rel="stylesheet" href="/style/scuola.css"/>
+</head>
+<body>
+  <iframe id="audio-frame" src="audio.html" style="position: fixed; top: 10px; right: 10px; width: 300px; height: 50px; border: none; z-index: 9999;"></iframe>
+  <div class="container" id="container">
+    <img src="/img/segreteria.png" alt="Corridoio" class="background"> 
+    <div class="info-box">Segreteria - Ingresso principale</div>
+    <div class="zone" id="corridoio" data-tooltip="Corridoio" onclick="goTo('corridoio.html')"></div>
+    <div class="zone" id="exit" data-tooltip="Uscita" onclick="goTo('/index.html')"></div>
+    <div class="zone" id="libreria" data-tooltip="Libreria" onclick="goTo('libreria.html')"></div>
+    <div class="zone" id="contatti" data-tooltip="Contatti" onclick="goTo('contatti.html')"></div>
+    <div class="zone" id="avvisi" data-tooltip="Avvisi "
+      onclick="openPopup('avvisi', 'Posto per le news ....')">
+    </div>
+    <div class="zone" id="segreteria" data-tooltip="Segreteria "
+      onclick="openPopup('Segreteria', 'Posizione segreteria ....')">
+    </div>
+    <div id="tooltip"></div>
+    <div id="popup" class="popup hidden">
+      <div class="popup-content">
+        <span class="close-btn" onclick="closePopup()">&times;</span>
+        <h2 id="popup-title"></h2>
+        <p id="popup-description"></p>
+      </div>
+    </div>
+  </div>
+  <script src="/script.js"></script>
+</body>
+</html>

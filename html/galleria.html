@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Galleria</title>
+  <link rel="stylesheet" href="/style/scuola.css"/>
+</head>
+<body>
+  <iframe id="audio-frame" src="audio.html" style="position: fixed; top: 10px; right: 10px; width: 300px; height: 50px; border: none; z-index: 9999;"></iframe>
+  <div class="container" id="container">
+    <img src="/img/galleria.png" alt="Libreria" class="background">
+    <div class="info-box">Galleria Immagini</div>
+    <div class="back" onclick="goTo('corridoio.html')">⬅</div>
+    <div class="zone" id="cornice1" data-tooltip="Ritmo & Danza"
+      onclick='openImg(
+        {src: "/gallery/danza/ritmo-e-danza.png", description: "BLA BLA BLA, BLA BLA, BLA BLA"}
+      )'>
+    </div>
+    <div class="zone" id="cornice2" data-tooltip="Cornice 2"
+      onclick='openImg(
+        {src: "/gallery/danza/ritmo-e-danza.png", description: "BLA BLA BLA, BLA BLA, BLA BLA BLA BLA BLA, BLA BLA, BLA BLA BLA BLA BLA, BLA BLA, BLA BLA BLA BLA BLA, BLA BLA, BLA BLA BLA BLA BLA, BLA BLA, BLA BLA"},
+        {src: "/gallery/danza/danza-e-passione.png", description: "BLA BLA BLA, BLA BLA, BLA BLA"},
+        {src: "/gallery/danza/yuppi.png", description: "BLA BLA BLA, BLA BLA, BLA BLA"},
+        {src: "/gallery/danza/stage-con-kledi.png", description: "BLA BLA BLA, BLA BLA, BLA BLA"},
+      )'>
+    </div>
+    <div id="tooltip"></div>
+    <div id="img-popup" class="popup hidden">
+      <div class="popup-content">
+        <span class="close-btn" onclick="closeImgPopup()">&times;</span>
+        <div id="img-slider">
+          <button id="prev-img" onclick="changeImg(-1)">←</button>
+          <div id="img-slide"></div>
+          <button id="next-img" onclick="changeImg(1)">→</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="/script.js"></script>
+</body>
+</html>

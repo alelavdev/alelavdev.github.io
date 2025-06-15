@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Libreria</title>
+  <link rel="stylesheet" href="/style/scuola.css"/>
+</head>
+<body>
+  <iframe id="audio-frame" src="audio.html" style="position: fixed; top: 10px; right: 10px; width: 300px; height: 50px; border: none; z-index: 9999;"></iframe>
+  <div class="container" id="container">
+    <img src="/img/biblioteca.png" alt="Libreria" class="background">
+    <div class="info-box">Libreria – Studio volumi</div>
+    <div class="back" onclick="goTo('segreteria.html')">⬅</div>
+    <div class="zone" id="libreria1" data-tooltip="Libreria 1"
+      onclick="openPopup('Libreria 1', 'Questa sezione contiene ....')">
+    </div>
+    <div class="zone" id="libreria2" data-tooltip="Libreria 2"
+      onclick="openPopup('Libreria 2', 'Questa sezione contiene ....')">
+    </div>
+    <div class="zone" id="libreria3" data-tooltip="Libreria 3 "
+      onclick="openPopup('Libreria 3', 'Questa sezione contiene ....')">
+    </div>
+    <div class="zone" id="libreria4" data-tooltip="Libreria 4 "
+      onclick="openPopup('Libreria 4', 'Questa sezione contiene ....')">
+    </div>
+    <div class="zone" id="libreria5" data-tooltip="Libreria 5 "
+      onclick="openPopup('Libreria 5', 'Questa sezione contiene ....')">
+    </div>
+    <div class="zone" id="libreria6" data-tooltip="Libreria 6 "
+      onclick="openPopup('Libreria 6', 'Questa sezione contiene ....')">
+    </div>
+    <div class="zone" id="libreria7" data-tooltip="Libreria 7 "
+      onclick="openPopup('Libreria 7', 'Questa sezione contiene ....')">
+    </div>
+    <div class="zone" id="libreria8" data-tooltip="Libreria 8 "
+      onclick="openPopup('Libreria 8', 'Questa sezione contiene ....')">
+    </div>
+    <div class="zone" id="primopiano" data-tooltip="In evidenza "
+      onclick="openPopup('In evidenza 1', 'Posto per notizia in evidenza 1 ....')">
+    </div>
+    <div class="zone" id="primopiano2" data-tooltip="In evidenza "
+      onclick="openPopup('In evidenza 2', 'Posto per notizia in evidenza 2 ....')">
+    </div>
+    <div class="zone" id="primopiano3" data-tooltip="In evidenza "
+      onclick="openPopup('In evidenza 3', 'Posto per notizia in evidenza 2 ....')">
+    </div>
+    <div class="zone" id="primopiano4" data-tooltip="In evidenza "
+      onclick="openPopup('In evidenza 4', 'Posto per notizia in evidenza 2 ....')">
+    </div>
+    <div id="tooltip"></div>
+    <div id="popup" class="popup hidden">
+      <div class="popup-content">
+        <span class="close-btn" onclick="closePopup()">&times;</span>
+        <h2 id="popup-title"></h2>
+        <p id="popup-description"></p>
+      </div>
+    </div>
+
+
+  </div>
+  <script src="/script.js"></script>
+</body>
+</html>

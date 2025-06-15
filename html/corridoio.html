@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Atrio Scuola</title>
+  <link rel="stylesheet" href="/style/scuola.css"/>
+</head>
+<body>
+  <iframe id="audio-frame" src="audio.html" style="position: fixed; top: 10px; right: 10px; width: 300px; height: 50px; border: none; z-index: 9999;"></iframe>
+  <div class="container" id="container">
+    <img src="/img/corridoio.png" alt="Corridoio" class="background"> 
+    <div class="info-box">Corridoio</div>
+    <div id="tooltip"></div>
+    <div class="zone" id="porta1" data-tooltip="Porta1" onclick="goTo('canto.html')"></div>
+    <div class="zone" id="porta2" data-tooltip="Porta2" onclick="goTo('artescenica.html')"></div>
+    <div class="zone" id="porta3" data-tooltip="Porta3" onclick="goTo('forum.html')"></div>
+    <div class="zone" id="porta4" data-tooltip="Porta4" onclick="goTo('pianoforte.html')"></div>
+    <div class="zone" id="porta5" data-tooltip="Porta5" onclick="goTo('galleria.html')"></div>
+    <div class="back" onclick="goTo('segreteria.html')">⬅</div>
+  </div>
+  <script src="/script.js"></script>
+</body>
+</html>

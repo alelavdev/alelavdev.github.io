@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Player Musicale</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 10px;
+      font-family: sans-serif;
+      background: #111;
+      color: white;
+    }
+
+    #player {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    button {
+      font-size: 1.2em;
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+    }
+
+    select {
+      background: #222;
+      color: white;
+      border: none;
+      padding: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div id="player">
+    <button id="playPause">🔊</button>
+    <select id="trackSelector">
+      <option value="amministrazione.mp3">Relax - Biblioteca</option>
+      <option value="libreria.mp3">Energia - Palestra</option>
+      <option value="pianoforte.mp3">Epica - Sala Trofei</option>
+      <option value="ballo.mp3">Epica - Sala Trofei</option>
+      <option value="canto.mp3">Epica - Sala Trofei</option>
+      <option value="contatti.mp3">Epica - Sala Trofei</option>
+      <option value="galleria.mp3">Epica - Sala Trofei</option>
+      <option value="home.mp3">Epica - Sala Trofei</option>
+    </select>
+  </div>
+
+  <audio id="bg-audio" src="/audio/ballo.mp3" autoplay loop></audio>
+
+  <script>
+    const audio = document.getElementById("bg-audio");
+    const playPauseBtn = document.getElementById("playPause");
+    const trackSelector = document.getElementById("trackSelector");
+
+    // Gestione play/pausa
+    playPauseBtn.addEventListener("click", () => {
+      if (audio.paused) {
+        audio.play();
+        playPauseBtn.textContent = "🔊";
+      } else {
+        audio.pause();
+        playPauseBtn.textContent = "🔇";
+      }
+    });
+
+    // Cambio traccia
+    trackSelector.addEventListener("change", () => {
+      audio.src = "/audio/" + trackSelector.value;
+      audio.play();
+      playPauseBtn.textContent = "🔊";
+    });
+
+    // Supporto a messaggi esterni
+    window.addEventListener("message", (event) => {
+      if (event.data.type === "changeTrack") {
+        audio.src = "/audio/" + event.data.track;
+        audio.play();
+        trackSelector.value = event.data.track;
+        playPauseBtn.textContent = "🔊";
+      } else if (event.data.type === "toggle") {
+        if (audio.paused) {
+          audio.play();
+          playPauseBtn.textContent = "🔊";
+        } else {
+          audio.pause();
+          playPauseBtn.textContent = "🔇";
+        }
+      }
+    });
+  </script>
+</body>
+</html>
